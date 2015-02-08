@@ -1,5 +1,5 @@
-n   a   r   w   a   l
-=====================
+n    a    r    w    a    l
+==========================
 
 `narwal` is a Object Model library for MySQL.
 
@@ -322,60 +322,18 @@ SELECT * FROM players WHERE name='Dora';
 Player.find({ name: 'Dora' });
 ```
 
-### SELECT ... WHERE NOT
+#### Map
 
-```sql
-SELECT * FROM players WHERE name!='Dora';
-```
+| SQL                         | Narwal                      |
+|-----------------------------|-----------------------------|
+| field=value                 | { field: *value* }            |
+| field!=value                | { field: { **not**: *value* } }   |
+| field=value AND field=value | { field: [*value*, *value*] }   |
+| (field=value AND field=value) OR (field=value AND field=value) | [ { field: *value*, field: *value* }, { field: *value*, field: *value* } ] | 
+| field>value                 | { field: { **gt**: *value* } }    |
+| field>=value                | { field: { **ge**: *value* } }    |
+| field<value                 | { field: { **lt**: *value* } }    |
+| field<=value                | { field: { **le**: *value* } }    |
+| field regexp value          | { field: **/***value***/** }          |
+| field like value            | { field: { **like**: *value* } }  |
 
-```js
-Player.find({ name: { not: 'Dora' } });
-```
-
-### SELECT ... WHERE >
-
-```sql
-SELECT * FROM players WHERE score > 100;
-```
-
-```js
-Player.find({ score: { gt: 100 } });
-// Or
-Player.find({ score: { '>': 100 } });
-```
-
-### SELECT ... WHERE >=
-
-```sql
-SELECT * FROM players WHERE score >= 100;
-```
-
-```js
-Player.find({ score: { ge: 100 } });
-// Or
-Player.find({ score: { '>=': 100 } });
-```
-
-### SELECT ... WHERE <
-
-```sql
-SELECT * FROM players WHERE score < 100;
-```
-
-```js
-Player.find({ score: { lt: 100 } });
-// Or
-Player.find({ score: { '<': 100 } });
-```
-
-### SELECT ... WHERE <=
-
-```sql
-SELECT * FROM players WHERE score <= 100;
-```
-
-```js
-Player.find({ score: { le: 100 } });
-// Or
-Player.find({ score: { '<=': 100 } });
-```
