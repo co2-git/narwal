@@ -184,3 +184,198 @@ If you need to use other data types, just enter them as a string:
   "lat": "decimal(9,6)"
 }
 ```
+
+### Required
+
+You can mark a field as required:
+
+```js
+new narwal.Model('Player', {
+  "name": {
+    type: String,
+    required: true
+  }
+);
+```
+
+# The Queries
+
+All queries return an instance of Narwal.Query
+
+## The Narwal Query
+
+The query is an emitter. It emits an error event on failure and a success event otherwise.
+
+```js
+Player
+  
+  .find()
+  
+  .on('error', function (error) {
+    throw error;
+  })
+  
+  .on('success', function (players) {
+    console.log(players.length);
+  })
+```
+
+Or you can use the convenient methods `error` and `success`:
+
+```js
+Player
+
+  .find()
+  
+  .error(function (error) {
+    throw error;
+  })
+  
+  .success(function (players) {
+    console.log(players.length);
+  });
+```
+
+Or the `then` method:
+
+```js
+Player
+
+  .find()
+  
+  .then(
+    function (players) {
+      console.log(players.length):
+    },
+    
+    function (error) {
+      throw error;
+    }
+  );
+```
+
+Or you can use the callback syntax:
+
+```js
+Player
+
+  .find(function (error, players) {
+    if ( error ) {
+      throw error:
+    }
+    
+    console.log(players.length);
+  });
+```
+
+## SELECT
+
+You can perform a select method using the `find()` method. On success, it will emit an array of rows.
+
+```sql
+SELECT * FROM players;
+```
+
+```js
+Player
+  
+  .find()
+  
+  .success(function (players) {
+    // ...
+  });
+```
+
+### forEach
+
+Since `find()` returns an array, you can use the convenient method `forEach` to walk them:
+
+```js
+Player
+  
+  .find()
+  
+  .forEach(function (player) {
+    console.log(player.name);
+  });
+```
+
+You can omit the `find()` method:
+
+```js
+Player
+  
+  .forEach(function (player) {
+    console.log(player.name);
+  });
+```
+
+### SELECT ... WHERE
+
+Pass a JSON object to be used as a filter:
+
+```sql
+SELECT * FROM players WHERE name='Dora';
+```
+
+```js
+Player.find({ name: 'Dora' });
+```
+
+### SELECT ... WHERE NOT
+
+```sql
+SELECT * FROM players WHERE name!='Dora';
+```
+
+```js
+Player.find({ name: { not: 'Dora' } });
+```
+
+### SELECT ... WHERE >
+
+```sql
+SELECT * FROM players WHERE score > 100;
+```
+
+```js
+Player.find({ score: { gt: 100 } });
+// Or
+Player.find({ score: { '>': 100 } });
+```
+
+### SELECT ... WHERE >=
+
+```sql
+SELECT * FROM players WHERE score >= 100;
+```
+
+```js
+Player.find({ score: { ge: 100 } });
+// Or
+Player.find({ score: { '>=': 100 } });
+```
+
+### SELECT ... WHERE <
+
+```sql
+SELECT * FROM players WHERE score < 100;
+```
+
+```js
+Player.find({ score: { lt: 100 } });
+// Or
+Player.find({ score: { '<': 100 } });
+```
+
+### SELECT ... WHERE <=
+
+```sql
+SELECT * FROM players WHERE score <= 100;
+```
+
+```js
+Player.find({ score: { le: 100 } });
+// Or
+Player.find({ score: { '<=': 100 } });
+```
