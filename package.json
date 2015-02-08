@@ -10,5 +10,8 @@
   "license": "BSD-2-Clause",
   "dependencies": {
     "mysql": "~2.5.4"
+  },
+  "devDependencies": {
+    "colors": "~1.0.3"
   }
 }
