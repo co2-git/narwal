@@ -1,7 +1,7 @@
 n   a   r   w   a   l
 =====================
 
-`narwal` is a model library for MySQL
+`narwal` is a Object Model library for MySQL.
 
 # Install
 
@@ -11,117 +11,61 @@ npm install narwal
 
 # Usage
 
-## Define a model
+First, create models of your database structure. Let's take the infamous `employees` table:
+
 
 ```js
+
 var narwal = require('narwal');
 
-var Category = new narwal.Model('Category',{
+var Employee = new narwal.Model('Employee', {
   
-  'title': {
-    type: String,
-    required: true
-  }
-
-});
-```
-
-## Select
-
-```js
-Category
-  .find()
-  .forEach(function (category) {
-    // ...
-  });
-```
-
-## Select ... WHERE
-
-```js
-Category
-  .find({ title: 'Sport' })
-  .forEach(function (category) {
-    // ...
-  });
-```
-
-## Select ONE
-
-```js
-Category
-  .findOne({ title: 'Sport' })
-  .then(function (category) {
-    // ...
-  });
-```
-
-## Insert
-
-```js
-Category
-  .insert({ title: 'Music' })
-  .then(function () {
-    // ...
-  });
-```
-
-## Update
-
-```js
-Category
-  .update({ title: 'Music' }, { title: 'Music & Video' })
-  .then(function () {
-    // ...
-  });
-```
-
-## Delete
-
-```js
-Category
-  .remove({ title: 'Music & Video' })
-  .then(function () {
-    // ...
-  });
-```
-
-## JOIN TABLE
-
-```js
-var narwal = require('narwal');
-var Category = require('./Category');
-
-var Product = new narwal.Model('Product',{
-  
-  'title': {
+  'first_name': {
     type: String,
     required: true
   },
 
-  'category': Category,
+  'last_name': {
+    type: String,
+    required: true
+  },
 
-  'price': {
-    type: Number,
+  'dob': {
+    type: Date,
     required: true
   }
 
 });
+```
 
-//  SELECT * FROM products
-//  JOIN categories ON categories.id = products.category
-//  WHERE categories.title = 'Sport'
+Now it's easy to query your Employee model:
 
-Product
-  
-  .find({ category: { title: 'Sport' } })
+```js
+// SELECT * FROM employees
 
-  .forEach(function (product) {
+Employee.forEach(function (employee) {
+  // ...
+});
 
-  });
+// UPDATE employees SET last_name='Johnson' WHERE last_name='Jackson';
+
+Employee.update({ last_name: 'Jackson' }, { last_name: 'Johnson' });
+
+// INSERT INTO employees VALUES('Chihiro', 'Ono')
+
+Employee.insert({ first_name: 'Chihiro', last_name: 'Ono' });
+
+// DELETE FROM employees WHERE last_name='Johnson';
+
+Employee.remove({ last_name: 'Johnson' })
 
 ```
 
+# The Model
+
+```js
+new narwal.Model(String, Object, Object);
+```
 
 # Data types
 
