@@ -198,6 +198,41 @@ new narwal.Model('Player', {
 );
 ```
 
+### Specify a field name
+
+You can choose to use a different field name:
+
+```js
+new narwal.Model('Player', {
+  "name": {
+    type: String,
+    field: 'player_name'
+  }
+);
+```
+
+### Join and reference
+
+You can join two or more tables together:
+
+```js
+var Category = new narwal.Model('Category', { name: String, code: Number });
+
+var Product = new narwal.Model('Product', { name: String, category: Category });
+```
+
+By default, `narwal` joins a reference table to its `id` field. You can specify another field however:
+
+```js
+new narwal.Model('Product', {
+  // JOIN products.category to 
+  category: {
+    ref: Category,
+    on: 'code' // default: 'id'
+  }
+});
+```
+
 # The Queries
 
 All queries return an instance of Narwal.Query
@@ -337,3 +372,146 @@ Player.find({ name: 'Dora' });
 | field regexp value          | { field: **/***value***/** }          |
 | field like value            | { field: { **like**: *value* } }  |
 
+### SELECT ONE
+
+You can choose to select only one row. In this case, success will emit an Object instead of an Array of objects.
+
+```js
+Player
+
+  .findOne()
+  
+  .then(function(player) {
+    // ...
+  });
+```
+
+### SELECT BY ID
+
+You can select directly by id
+
+```sql
+SELECT * FROM players WHERE id=2000;
+```
+
+```js
+Player
+
+  .findById(2000)
+  
+  .then(function(player) {
+    // ...
+  });
+```
+
+### SELECT FIELDS
+
+You can retrieve only a specific set of fields
+
+```sql
+SELECT id,score FROM players;
+```
+
+```js
+Player
+
+  .find()
+  
+  .select('id', 'score')
+  
+  .forEach(function (player) {} );
+```
+
+### UNSELECT FIELDS
+
+You can substract fields from the selection
+
+```sql
+SELECT name,  player, score FROM players;
+```
+
+```js
+Player
+
+  .find()
+  
+  .select('-id')
+  
+  .forEach(function (player) {} );
+```
+
+### SELECT COLUMNS AS
+
+
+
+## JOIN
+
+```sql
+SELECT * FROM players JOIN teams ON players.team=teams.id;
+```
+
+```js
+Player
+
+  .find()
+  
+  .join('team');
+```
+
+### JOIN AND SELECT
+
+```sql
+SELECT players.name, teams.name FROM players JOIN teams ON players.team=teams.id;
+```
+
+```js
+Player
+
+  .find()
+  
+  .join('team')
+  
+  .select('name', { 'team': 'name' });
+```
+
+### LEFT JOIN
+
+```sql
+SELECT * FROM players LEFT JOIN teams ON players.team=teams.id;
+```
+
+```js
+Player
+
+  .find()
+  
+  .join.left('team');
+```
+
+### RIGHT JOIN
+
+```sql
+SELECT * FROM players RIGHT JOIN teams ON players.team=teams.id;
+```
+
+```js
+Player
+
+  .find()
+  
+  .join.right('team');
+```
+
+### INNER JOIN
+
+```sql
+SELECT * FROM players INNER JOIN teams ON players.team=teams.id;
+```
+
+```js
+Player
+
+  .find()
+  
+  .join.inner('team');
+```
