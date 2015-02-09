@@ -362,15 +362,15 @@ Player.find({ name: 'Dora' });
 | SQL                         | Narwal                      |
 |-----------------------------|-----------------------------|
 | field=value                 | { field: *value* }            |
-| field!=value                | { field: { **not**: *value* } }   |
+| field!=value                | { field: { **$not**: *value* } }   |
 | field=value AND field=value | { field: [*value*, *value*] }   |
 | (field=value AND field=value) OR (field=value AND field=value) | [ { field: *value*, field: *value* }, { field: *value*, field: *value* } ] | 
-| field>value                 | { field: { **gt**: *value* } }    |
-| field>=value                | { field: { **ge**: *value* } }    |
-| field<value                 | { field: { **lt**: *value* } }    |
-| field<=value                | { field: { **le**: *value* } }    |
+| field>value                 | { field: { **$gt**: *value* } }    |
+| field>=value                | { field: { **$ge**: *value* } }    |
+| field<value                 | { field: { **$lt**: *value* } }    |
+| field<=value                | { field: { **$le**: *value* } }    |
 | field regexp value          | { field: **/***value***/** }          |
-| field like value            | { field: { **like**: *value* } }  |
+| field like value            | { field: { **$like**: *value* } }  |
 
 ### SELECT ONE
 
@@ -444,7 +444,7 @@ Player
 
 
 
-## JOIN
+# JOIN
 
 ```sql
 SELECT * FROM players JOIN teams ON players.team=teams.id;
@@ -458,7 +458,7 @@ Player
   .join('team');
 ```
 
-### JOIN AND SELECT
+## JOIN AND SELECT
 
 ```sql
 SELECT players.name, teams.name FROM players JOIN teams ON players.team=teams.id;
@@ -474,7 +474,7 @@ Player
   .select('name', { 'team': 'name' });
 ```
 
-### LEFT JOIN
+## LEFT JOIN
 
 ```sql
 SELECT * FROM players LEFT JOIN teams ON players.team=teams.id;
@@ -488,7 +488,7 @@ Player
   .join.left('team');
 ```
 
-### RIGHT JOIN
+## RIGHT JOIN
 
 ```sql
 SELECT * FROM players RIGHT JOIN teams ON players.team=teams.id;
@@ -502,7 +502,7 @@ Player
   .join.right('team');
 ```
 
-### INNER JOIN
+## INNER JOIN
 
 ```sql
 SELECT * FROM players INNER JOIN teams ON players.team=teams.id;
@@ -515,3 +515,91 @@ Player
   
   .join.inner('team');
 ```
+
+## Find in Joined table
+
+```sql
+SELECT * FROM players JOIN teams ON players.team=teams.id WHERE team.name='Red';
+```
+
+```js
+Player.find({ "team": { "name": "Red" } };
+```
+
+# Insert
+
+Use the `insert()` method to replay `INSERT INTO` sql statements`.
+
+```sql
+INSERT INTO players (name) VALUES('Rebecca');
+```
+
+```js
+Player
+
+  .insert({ name: 'Rebecca' })
+  
+  .then(function (Rebecca) {
+    // ...
+  });
+```
+
+# Update
+
+```sql
+UPDATE players SET score=100 WHERE players.team=(SELECT teams.id FROM teams WHERE teams.name='Red');
+```
+
+```js
+Player
+
+  .update({ "score": 100 })
+  
+  .where({ "team": { "name": "Red" } });
+```
+
+# Increment
+
+```sql
+UPDATE players SET score= score + 100 WHERE players.team=(SELECT teams.id FROM teams WHERE teams.name='Red');
+```
+
+```js
+Player
+
+  .inc({ "score": 100 })
+  
+  .where({ "team": { "name": "Red" } });
+```
+
+# Decrement
+
+```sql
+UPDATE players SET score= score - 100 WHERE players.team=(SELECT teams.id FROM teams WHERE teams.name='Red');
+```
+
+```js
+Player
+
+  .dec({ "score": 100 })
+  
+  .where({ "team": { "name": "Red" } });
+```
+
+# Update user function
+
+```sql
+UPDATE players SET name=LOWER(name) WHERE players.team=(SELECT teams.id FROM teams WHERE teams.name='Red');
+```
+
+```js
+Player
+
+  .update({ "name": function (name) { return name.toLowerCase(); } })
+  
+  .where({ "team": { "name": "Red" } });
+```
+
+# Remove
+
+# Create
