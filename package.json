@@ -12,6 +12,8 @@
     "mysql": "~2.5.4"
   },
   "devDependencies": {
-    "colors": "~1.0.3"
+    "colors": "~1.0.3",
+    "should": "~4.6.5",
+    "mocha": "~2.1.0"
   }
 }
