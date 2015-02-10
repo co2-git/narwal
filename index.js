@@ -2,8 +2,6 @@
   
   'use strict';
 
-  var Narwal = require('./lib/Narwal');
-
-  module.exports = Narwal;
+  module.exports = require('./lib/Narwal');
 
 } ();
