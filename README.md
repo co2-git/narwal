@@ -71,17 +71,23 @@ Now it's easy to query your Employee model:
 
 var Employee = require('./models/Employee');
 
+// Create a connection link
+
+Employee.connect('mysql://user@host/db');
+
 // Get Full Name
 
 Employee.getFullName(function gotFullName (error, fullName) {
   //...
 });
 
-// SELECT * FROM employees
+// SELECT * FROM employees ORDER BY dob DESC
 
-Employee.forEach(function forEachEmployee (employee) {
-  // ...
-});
+Employee
+
+  .forEach(function forEachEmployee (employee) {
+    // ...
+  });
 
 // UPDATE employees SET last_name='Johnson' WHERE first_name='Jack';
 
@@ -93,9 +99,9 @@ Employee
 
 Employee.insert({ first_name: 'Chihiro', last_name: 'Ono' });
 
-// DELETE FROM employees WHERE last_name='Johnson';
+// DELETE FROM employees WHERE last_name='Johnson' LIMIT 5;
 
-Employee.remove({ last_name: 'Johnson' })
+Employee.remove({ last_name: 'Johnson' }, { limit: 5 });
 
 ```
 
@@ -458,6 +464,58 @@ Player
 
 ## SELECT
 
+### The Array approach
+
+When retrieving an array of rows, you can favor a syntax that looks more closely like arrays in JavaScript:
+
+```sql
+SELECT * FROM players
+```
+
+```js
+Player.forEach(function forEachPlayer (player) {
+  // ...
+});
+```
+
+```sql
+SELECT * FROM players WHERE first_name='Jack'
+```
+
+```js
+Player
+  .filter({ first_name: 'Jack' })
+  .forEach(forEachPlayer);
+```
+
+
+```sql
+SELECT * FROM players WHERE first_name!='Jack' LIMIT 10
+```
+
+```js
+Player
+  .filter({ first_name: 'Jack' }, false, 10)
+  .forEach(forEachPlayer);
+```
+
+```sql
+SELECT * FROM players WHERE first_name!='Jack' LIMIT 10 ORDER BY dob DESC, id ASC
+```
+
+```js
+Player
+  .filter({ "first_name": 'Jack' }, false, 10)
+  .sort({ "dob": false, "id": true })
+  .forEach(forEachPlayer);
+```
+
+```sql
+UPDATE players SET SCORE=100 WHERE first_name!='Jack' LIMIT 10
+```
+
+## Find
+
 You can perform a select method using the `find()` method. On success, it will emit an array of rows.
 
 ```sql
@@ -474,29 +532,6 @@ Player
   });
 ```
 
-### forEach
-
-Since `find()` returns an array, you can use the convenient method `forEach` to walk them:
-
-```js
-Player
-  
-  .find()
-  
-  .forEach(function forEachPlayer (player) {
-    console.log(player.name);
-  });
-```
-
-You can omit the `find()` method:
-
-```js
-Player
-  
-  .forEach(function forEachPlayer (player) {
-    console.log(player.name);
-  });
-```
 
 ### SELECT ... WHERE
 
