@@ -43,7 +43,7 @@ Now it's easy to query your Employee model:
 ```js
 // SELECT * FROM employees
 
-Employee.forEach(function (employee) {
+Employee.forEach(function forEachEmployee (employee) {
   // ...
 });
 
@@ -92,7 +92,14 @@ Then it is easy to interact with this model from another file using `require`:
 
 var Player = require('./models/Player');
 
-Player.forEach(console.log.bind(console));
+Player
+  
+  .connect('mysql://narwal@localhost/narwal')
+  
+  .forEach(function forEachPlayer (player) {
+    assert(player instanceof Player.Row);
+  });
+
 ```
 
 ## The constructor
@@ -242,15 +249,16 @@ new narwal.Model('Product', {
 
 ## Default credentials
 
-If you refer to the Model section above, you will see that `narwal` connects by default to `mysql://root@localhost`.
+If you refer to the Model section above, you will see that `narwal` connects by default to `mysql://root@localhost/test`.
 
 ## Auto-connect
 
-When executing a query, `narwal` will try to connect. If you would use default credentials (which you should not for security reasons), you wouldn't need to call a `connect` method.
+When executing a query, `narwal` will try to connect. If you would use default credentials (which you should not for security reasons), you wouldn't need to call a `connect` method:
 
 ```js
 // work as is
 var model = new narwal.Model('User', {});
+// mysql://narwal@localhost/narwal/users
 model.find().forEach(function (user) {});
 ```
 
@@ -325,7 +333,7 @@ Player
   
   // On results
   
-  .found(function (players) {
+  .found(function foundPlayers (players) {
     Player
       
       // Connect to DB2
@@ -353,11 +361,11 @@ Player
   
   .find()
   
-  .on('error', function (error) {
+  .on('error', function findPlayerError (error) {
     throw error;
   })
   
-  .on('success', function (players) {
+  .on('success', function findPlayerSuccess (players) {
     console.log(players.length);
   })
 ```
@@ -369,11 +377,11 @@ Player
 
   .find()
   
-  .error(function (error) {
+  .error(function findPlayerError (error) {
     throw error;
   })
   
-  .success(function (players) {
+  .success(function findPlayerSuccess (players) {
     console.log(players.length);
   });
 ```
@@ -386,11 +394,11 @@ Player
   .find()
   
   .then(
-    function (players) {
+    function findPlayerThen (players) {
       console.log(players.length):
     },
     
-    function (error) {
+    function findPlayerThenError (error) {
       throw error;
     }
   );
@@ -401,7 +409,7 @@ Or you can use the callback syntax:
 ```js
 Player
 
-  .find(function (error, players) {
+  .find(function findPlayerCallback (error, players) {
     if ( error ) {
       throw error:
     }
@@ -423,7 +431,7 @@ Player
   
   .find()
   
-  .success(function (players) {
+  .success(function findPlayerSuccess (players) {
     // ...
   });
 ```
@@ -437,7 +445,7 @@ Player
   
   .find()
   
-  .forEach(function (player) {
+  .forEach(function forEachPlayer (player) {
     console.log(player.name);
   });
 ```
@@ -447,7 +455,7 @@ You can omit the `find()` method:
 ```js
 Player
   
-  .forEach(function (player) {
+  .forEach(function forEachPlayer (player) {
     console.log(player.name);
   });
 ```
@@ -488,7 +496,7 @@ Player
 
   .findOne()
   
-  .then(function(player) {
+  .then(function findOnePlayerThen (player) {
     // ...
   });
 ```
@@ -506,7 +514,7 @@ Player
 
   .findById(2000)
   
-  .then(function(player) {
+  .then(function findPlayerByIdThen (player) {
     // ...
   });
 ```
@@ -526,7 +534,7 @@ Player
   
   .select('id', 'score')
   
-  .forEach(function (player) {} );
+  .forEach(function forEachPlayer (player) {} );
 ```
 
 ### UNSELECT FIELDS
@@ -544,7 +552,7 @@ Player
   
   .select('-id')
   
-  .forEach(function (player) {} );
+  .forEach(function forEachPlayer (player) {} );
 ```
 
 ### SELECT COLUMNS AS
@@ -646,7 +654,7 @@ Player
 
   .insert({ name: 'Rebecca' })
   
-  .then(function (Rebecca) {
+  .then(function insertPlayerThen (Rebecca) {
     // ...
   });
 ```
@@ -702,7 +710,7 @@ UPDATE players SET name=LOWER(name) WHERE players.team=(SELECT teams.id FROM tea
 ```js
 Player
 
-  .update({ "name": function (name) { return name.toLowerCase(); } })
+  .update({ "name": function nameToLowerCase (name) { return name.toLowerCase(); } })
   
   .where({ "team": { "name": "Red" } });
 ```
