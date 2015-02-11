@@ -84,7 +84,6 @@ Employee.getFullName(function gotFullName (error, fullName) {
 // SELECT * FROM employees ORDER BY dob DESC
 
 Employee
-
   .forEach(function forEachEmployee (employee) {
     // ...
   });
@@ -92,16 +91,23 @@ Employee
 // UPDATE employees SET last_name='Johnson' WHERE first_name='Jack';
 
 Employee
-  .update({ last_name: 'Johnson' })
-  .where({ first_name: 'Jack' });
+  .filter({ first_name: 'Jack' })
+  .map({ last_name: 'Johnson' });
 
 // INSERT INTO employees VALUES('Chihiro', 'Ono')
 
-Employee.insert({ first_name: 'Chihiro', last_name: 'Ono' });
+Employee
+  .push({ first_name: 'Chihiro', last_name: 'Ono' })
+  .then(function pushEmployeeThen (employee) {
+    // ...
+  });
 
 // DELETE FROM employees WHERE last_name='Johnson' LIMIT 5;
 
-Employee.remove({ last_name: 'Johnson' }, { limit: 5 });
+Employee
+  .filter({ last_name: 'Johnson' })
+  .sort('id')
+  .pop(5);
 
 ```
 
