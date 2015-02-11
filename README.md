@@ -16,7 +16,11 @@ First, create models of your database structure. Let's take the infamous `employ
 
 ```js
 
+// file: models/Employee.js
+
 var narwal = require('narwal');
+
+// Declare the structure
 
 var Employee = new narwal.Model('Employee', {
   
@@ -36,20 +40,54 @@ var Employee = new narwal.Model('Employee', {
   }
 
 });
+
+// Helper functions
+
+Employee.getFullName = function getAge (employee_id, cb) {
+
+  this
+    
+    .findById(employee_id)
+    
+    .on('success', function (employee) {
+    
+      if ( ! employee ) {
+        return cb(new Error('No such employee'));
+      }
+      
+      cb(null, [employee.first_name, employee.last_name].join(' '));
+    })
+    
+    .on('error', cb);
+};
+
 ```
 
 Now it's easy to query your Employee model:
 
 ```js
+
+// file: index.js
+
+var Employee = require('./models/Employee');
+
+// Get Full Name
+
+Employee.getFullName(function gotFullName (error, fullName) {
+  //...
+});
+
 // SELECT * FROM employees
 
 Employee.forEach(function forEachEmployee (employee) {
   // ...
 });
 
-// UPDATE employees SET last_name='Johnson' WHERE last_name='Jackson';
+// UPDATE employees SET last_name='Johnson' WHERE first_name='Jack';
 
-Employee.update({ last_name: 'Jackson' }, { last_name: 'Johnson' });
+Employee
+  .update({ last_name: 'Johnson' })
+  .where({ first_name: 'Jack' });
 
 // INSERT INTO employees VALUES('Chihiro', 'Ono')
 
