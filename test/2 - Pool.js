@@ -22,7 +22,7 @@
       Pool.prototype.should.be.an.instanceof(require('events').EventEmitter);
     });
 
-    describe('Model methods', function () {
+    describe('Pool methods', function () {
 
       it ( 'should have a getConnection method', function () {
         Pool.prototype.getConnection.should.be.a.Function;

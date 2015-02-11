@@ -16,6 +16,16 @@
       pool = new Pool('mysql://' + user + '@' + host);
     });
 
+    it ( 'should emit a connected event' , function (done) {
+      pool.on('error', function (error) {
+        done(error);
+      });
+
+      pool.on('connected', function () {
+        done();
+      });
+    });
+
     it ( 'should be an instance of Pool', function () {
       (pool)  .should.be.an.instanceof(Pool);
     });
