@@ -4,9 +4,9 @@
 
 It is best to saved any model in its own file such as:
 
-```js
-// file: models/Player.js
+### models/Player.js
 
+```js
 ! function () {
   
   'use strict';
@@ -24,8 +24,9 @@ It is best to saved any model in its own file such as:
 
 Then it is easy to interact with this model from another file using `require`:
 
+### index.js
+
 ```js
-// some other file
 
 var Player = require('./models/Player');
 
@@ -45,17 +46,17 @@ Player
 new narwal.Model(String name, Object schema, Object options);
 ```
 
-### @arg name
+### name
 
 The name of the Model. By default, `narwal` will map this name with a table name in the following fashion: the name is put to lower case and a 's' is added to it. Hence, `new narwal.Model('Player')` will be mapped to the table `players`.
 
 You can overwrite that if you want to map your model to a different table. See the options section below.
 
-### @arg schema
+### schema
 
 View schema section below
 
-### @arg options
+### options
 
 An optional object that can have the following properties:
 
