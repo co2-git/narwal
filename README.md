@@ -1,6 +1,8 @@
 n    a    r    w    a    l
 ==========================
 
+!! alpha - do not use (yet) !!
+
 `narwal` (NodeJS) is a loosely coupled structure-data architecture for modeling and moving around your MySQL data.
 
 # Install
