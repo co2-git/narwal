@@ -220,6 +220,36 @@ Chainable:
 | notFound | `find().notFound(Function success)` |  Listens on "success" and ! [Row].length | 
 | forEach | `find().forEach(function (model) { //... }})` | Listens on "success" and for each [Row] |
 
+## Model `findById()`
+
+Performs a find query with a filter by id. Returns `Query`.
+
+    Model.findById(Number)
+
+```js
+
+// Find by id
+
+Model.findById(3837283);
+```
+
+Events:
+
+- **error** `Error`
+- **success** `[Row]`
+
+Chainable:
+
+| Name | Example | Description |
+|------|---------|-------------|
+| on | `findById().on(String event, Function then)` | Event listener |
+| then | `findById().then(Function success, Function? error)` |  Promise shim | 
+| success | `findById().success(Function success)` |  Listens on "success" | 
+| error | `findById().error(Function error)`  | Listens on "error" | 
+| found | `findById().found(Function success)` |  Listens on "success" and [Row].length | 
+| notFound | `findById().notFound(Function success)` |  Listens on "success" and ! [Row].length | 
+| forEach | `findById().forEach(function (model) { //... }})` | Listens on "success" and for each [Row] |
+
 ## Model findOne
 
 Performs a find query and returns first found. Returns Query. Success emits a Row object.
