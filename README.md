@@ -53,113 +53,32 @@ new narwal.Model('Player', { name: String, score: Number })
   .pipe(new narwal.Model('Player', { name: String, score: Number }).connect('mysql://...'))
 ```
 
-# Usage
-
-First, create models of your database structure. Let's take the infamous `employees` table:
-
-
-```js
-
-// file: models/Employee.js
-
-var narwal = require('narwal');
-
-// Declare the structure
-
-var Employee = new narwal.Model('Employee', {
-  
-  'first_name': {
-    type: String,
-    required: true
-  },
-
-  'last_name': {
-    type: String,
-    required: true
-  },
-
-  'dob': {
-    type: Date,
-    required: true
-  }
-
-});
-
-// Helper functions are easy to implement:
-
-Employee.getFullName = function getFullName (employee_id, cb) {
-
-  this
-    
-    .findById(employee_id)
-    
-    .on('success', function (employee) {
-    
-      if ( ! employee ) {
-        return cb(new Error('No such employee'));
-      }
-      
-      cb(null, [employee.first_name, employee.last_name].join(' '));
-    })
-    
-    .on('error', cb);
-};
-
-```
-
-Now it's easy to query your Employee model from another file:
-
-```js
-
-// file: index.js
-
-var Employee = require('./models/Employee');
-
-// Create a connection link
-
-Employee.connect('mysql://user@host/db');
-
-// Get Full Name
-
-Employee.getFullName(function gotFullName (error, fullName) {
-  //...
-});
-
-// SELECT * FROM employees ORDER BY dob DESC
-
-Employee
-  .forEach(function forEachEmployee (employee) {
-    // ...
-  });
-
-// UPDATE employees SET last_name='Johnson' WHERE first_name='Jack';
-
-Employee
-  .filter({ first_name: 'Jack' })
-  .map({ last_name: 'Johnson' });
-
-// INSERT INTO employees VALUES('Chihiro', 'Ono')
-
-Employee
-  .push({ first_name: 'Chihiro', last_name: 'Ono' })
-  .then(function pushEmployeeThen (employee) {
-    // ...
-  });
-
-// DELETE FROM employees WHERE last_name='Johnson' LIMIT 5;
-
-Employee
-  .filter({ last_name: 'Johnson' })
-  .sort('id')
-  .pop(5);
-
-```
-
 # [The Model](docs/Model.md)
 
 # [Connect](docs/Connect.md)
 
 # [The Query](docs/Query.md)
+
+# `{Model} new narwal.Model(String name, Object? schema, Object? options)`
+    
+## `{Query} Model.find(Mixed? filter)`
+
+Performs a find query. Returns Query. Success emits an Array.
+
+```js
+
+// Find all
+
+Model.find();
+
+// Sugar for Model.find().filter(Object);
+
+Model.find({ field: 'value' });
+
+// Sugar for Model.find().limit(Number);
+
+Model.find(10);
+```
 
 # Find
 
