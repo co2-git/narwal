@@ -115,15 +115,13 @@ new narwal.Model('Player', { name: String }, { prefix: 'test_' });
 
 ## Model `connect()`
 
-Create a new MySQL thread. Returns `Pool`.
+Create a new MySQL thread.
 
-    Model.connect(String url)
+Returns `Model`.
+
+    Model.connect(String url, Function? callback)
 
 ```js
-
-// Connect to default mysql://localhost/test
-
-Model.connect();
 
 // Connect to custom URL
 
@@ -136,14 +134,10 @@ Events:
 - **connected**
 - **disconnected**
 
-Chainable:
+Helpers:
 
 | Name | Example | Description |
 |------|---------|-------------|
-| on, once, off | `connect().on(String event, Function then)` | Event listener |
-| then | `connect().then(Function connected, Function? error)` |  Promise shim | 
-| success | `connect().success(Function connected)` |  Listens on "connected" | 
-| error | `connect().error(Function disconnected)`  | Listens on "disconnected" | 
 | connected | `connect().connected(Function connected)` |  Listens on "connected" | 
 | disconnected | `connect().disconnected(Function disconnected)` |  Listens on "disconnected" | 
 
@@ -151,20 +145,18 @@ Chainable:
 
 Create a table stucture from Model. Returns `Query`.
 
-    Model.create()
+    Model.create(Function? callback)
 
 ```js
-new narwal.Model('Model',
-    { "name": { "type": String, "unique": true } },
-    { id: false, engine: 'MyISAM' }
-  )
-  .create();
+
+// Create as is
+Player.create();
 ```
 
 Is the same than:
 
 ```sql
-CREATE TABLE models ( name VARCHAR NOT NULL, UNIQUE(name) ) ENGINE=MyISAM;
+CREATE TABLE models;
 ```
 
 Events:
@@ -172,19 +164,15 @@ Events:
 - **error** `Error`
 - **success**
 
-Chainable:
+Helpers:
 
 | Name | Example | Description |
 |------|---------|-------------|
-| on, once, off | `create().on(String event, Function then)` | Event listener |
-| then | `create().then(Function success, Function? error)` |  Promise shim | 
-| success | `create().success(Function success)` |  Listens on "success" | 
-| error | `create().error(Function error)`  | Listens on "error" | 
-| connected | `create().created(Function success)` |  Listens on "success" |
+| created | `create().created(Function success)` |  Listens on "success" |
     
 ## Model `find()`
 
-Performs a find query. Returns `Query`.
+Performs a find query. Returns [`Find`](#Find).
 
     Model.find(Mixed? filter)
 
@@ -284,7 +272,7 @@ Chainable:
 | notFound | `findOne().notFound(Function success)` |  Listens on "success" and ! Row |
 
 
-# Find
+#<a name="Find"></a> Find
 
 # Insert
 
