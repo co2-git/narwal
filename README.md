@@ -104,9 +104,11 @@ Creates a new Narwal Model.
 new narwal.Model('Player', { name: String }, { prefix: 'test_' });
 ```
     
-## `{Query} Model.find(Mixed? filter)`
+## Model find
 
 Performs a find query. Returns Query. Success emits an Array.
+
+    Model.find(Mixed? filter)
 
 ```js
 
@@ -122,6 +124,57 @@ Model.find({ field: 'value' });
 
 Model.find(10);
 ```
+
+Events:
+
+- **error** `Error`
+- **success** `[Row]`
+
+Chainable:
+
+| Name | Example | Description |
+|------|---------|-------------|
+| on | `find().on(String event, Function then)` | Event listener |
+| then | `find().then(Function success, Function? error)` |  Promise shim | 
+| success | `find().success(Function success)` |  Listens on "success" | 
+| error | `find().error(Function error)`  | Listens on "error" | 
+| found | `find().found(Function success)` |  Listens on "success" and [Row].length | 
+| notFound | `find().notFound(Function success)` |  Listens on "success" and ! [Row].length | 
+| forEach | `find().forEach(function (model) { //... }})` | Listens on "success" and for each [Row] |
+
+## Model findOne
+
+Performs a find query and returns first found. Returns Query. Success emits a Row object.
+
+    Model.findOne(Mixed? filter)
+
+```js
+
+// Find one with no filter
+
+Model.findOne();
+
+// Sugar for Model.findOne().filter(Object);
+
+Model.findOne({ field: 'value' });
+```
+
+Events:
+
+- **error** `Error`
+- **success** `Row`
+
+Chainable:
+
+| Name | Example | Description |
+|------|---------|-------------|
+| on | `find().on(String event, Function then)` | Event listener |
+| then | `find().then(Function success, Function? error)` |  Promise shim | 
+| success | `find().success(Function success)` |  Listens on "success" | 
+| error | `find().error(Function error)`  | Listens on "error" | 
+| found | `find().found(Function success)` |  Listens on "success" and Row | 
+| notFound | `find().notFound(Function success)` |  Listens on "success" and ! Row |
+
 
 # Find
 
