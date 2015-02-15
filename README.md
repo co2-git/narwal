@@ -17,26 +17,39 @@ npm install narwal
 var narwal = require('narwal');
 ```
 
-# Features
+# Overview
 
 `narwal` gives you model abstraction so you manipulate your MySQL data and structure easier.
 
+```sql
+SELECT name FROM players
+```
+
 ```js
-
-// SELECT name FROM players
-
 new narwal.Model('Player', { name: String }).find();
+```
 
-// INSERT INTO players (name) VALUES('Lara')
+```sql
+INSERT INTO players (name) VALUES('Lara')
+```
 
+```js
 new narwal.Model('Player', { name: String }).insert({ name: 'Lara' });
+```
 
-// UPDATE players SET score=100 WHERE name='Lara'
+```sql
+UPDATE players SET score=100 WHERE name='Lara'
+```
 
+```js
 new narwal.Model('Player', { name: String, score: Number }).map({ score: 100 })
+```
 
-// DELETE FROM players WHERE score = 100
+```sql
+DELETE FROM players WHERE score = 100
+```
 
+```js
 new narwal.Model('Player', { score: Number }).filter({ score: 100 }).remove();
 ```
 
@@ -59,7 +72,21 @@ new narwal.Model('Player', { name: String, score: Number })
 
 # [The Query](docs/Query.md)
 
-# `{Model} new narwal.Model(String name, Object? schema, Object? options)`
+# Model constructor
+
+Creates a new Narwal Model.
+
+    new narwal.Model(String name, Object? structure, Object? options);
+
+| Argument | Type | Required | Default | Description |
+|----------|------|----------|---------|-------------|
+| name | String | ✔ | | The name of the model |
+| structure | Object | ✖ | `{}` | The structure |
+| options | Object | ✖ | `{}` | Model options |
+
+```js
+new narwal.Model('Player', { name: String }, { prefix: 'test_' });
+```
     
 ## `{Query} Model.find(Mixed? filter)`
 
