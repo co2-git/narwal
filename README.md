@@ -146,6 +146,41 @@ Chainable:
 | error | `connect().error(Function disconnected)`  | Listens on "disconnected" | 
 | connected | `connect().connected(Function connected)` |  Listens on "connected" | 
 | disconnected | `connect().disconnected(Function disconnected)` |  Listens on "disconnected" | 
+
+## Model `create()`
+
+Create a table stucture from Model. Returns `Query`.
+
+    Model.create()
+
+```js
+new narwal.Model('Model',
+    { "name": { "type": String, "unique": true } },
+    { id: false, engine: 'MyISAM' }
+  )
+  .create();
+```
+
+Is the same than:
+
+```sql
+CREATE TABLE models ( name VARCHAR NOT NULL, UNIQUE(name) ) ENGINE=MyISAM;
+```
+
+Events:
+
+- **error** `Error`
+- **success**
+
+Chainable:
+
+| Name | Example | Description |
+|------|---------|-------------|
+| on, once, off | `create().on(String event, Function then)` | Event listener |
+| then | `create().then(Function success, Function? error)` |  Promise shim | 
+| success | `create().success(Function success)` |  Listens on "success" | 
+| error | `create().error(Function error)`  | Listens on "error" | 
+| connected | `create().created(Function success)` |  Listens on "success" |
     
 ## Model `find()`
 
