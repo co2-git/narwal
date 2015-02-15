@@ -11,6 +11,118 @@ n    a    r    w    a    l
 npm install narwal
 ```
 
+# Use
+
+```js
+var narwal = require('narwal');
+```
+
+# Features
+
+## Model abstraction for MySQL
+
+```js
+var Player = new narwal.Model('Player', { name: String });
+```
+
+## Model Query API
+
+```js
+Player.insert({ name: 'Lara' });
+
+Player.find({ name: 'Lara' });
+```
+
+## Connexion support
+
+```js
+Player
+
+  .connect('mysql://mysql@localhost/test')
+
+  .find();
+```
+
+## Events based and promise shim support
+
+```js
+Player
+  
+  .find()
+  
+  .on('error', function ko (error) {})
+  
+  .on('not found', function notFound () {})
+  
+  .on('found', function found (players) {})
+  
+  // promise shim
+  
+  .then(function ok (players) {})
+```
+
+## Array syntax
+
+```js
+Player
+
+  .filter({ name: 'Laura' })
+  
+  .not({ team: { color: 'red' } })
+  
+  .sort({ name: 1 })
+  
+  .limit(1000)
+  
+  .forEach(function (player) {})
+```
+    
+## Stream - write support
+
+```js
+Player
+
+  .stream()
+  
+  // query 1000 documents at a time
+  
+  .buffer(1000)
+  
+  // maximum memory in bytes - will not resume until maximum memory not available
+  
+  .mem(1024)
+  
+  // stream results in JSON
+  
+  .encoding('utf-8')
+  
+  // pause 10 seconds after each buffer
+  
+  .pause(10000)
+  
+  // write results to a stream
+  
+  .pipe(writableStream);
+```
+
+## Stream - read support
+
+```js
+fs
+  .createReadStream('players.json')
+  .pipe(Player.stream());
+```
+
+## Pipe models
+
+```js
+Player
+  
+  .connect(url1)
+  
+  .pipe(Player.connect(url2));
+```
+
 # Usage
 
 First, create models of your database structure. Let's take the infamous `employees` table:
