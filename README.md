@@ -95,7 +95,9 @@ new narwal.Model('Player', { name: String, score: Number })
 
 # [The Query](docs/Query.md)
 
-# Model constructor
+# Model
+
+## Model `constructor`
 
 Creates a new Narwal Model.
 
@@ -110,10 +112,44 @@ Creates a new Narwal Model.
 ```js
 new narwal.Model('Player', { name: String }, { prefix: 'test_' });
 ```
-    
-## Model find
 
-Performs a find query. Returns Query. Success emits an Array.
+## Model `connect()`
+
+Create a new MySQL thread. Returns `Pool`.
+
+    Model.connect(String url)
+
+```js
+
+// Connect to default mysql://localhost/test
+
+Model.connect();
+
+// Connect to custom URL
+
+Model.connect('mysql://user:password@host:port/db');
+```
+
+Events:
+
+- **error** `Error`
+- **connected**
+- **disconnected**
+
+Chainable:
+
+| Name | Example | Description |
+|------|---------|-------------|
+| on, once, off | `connect().on(String event, Function then)` | Event listener |
+| then | `connect().then(Function connected, Function? error)` |  Promise shim | 
+| success | `connect().success(Function connected)` |  Listens on "connected" | 
+| error | `connect().error(Function disconnected)`  | Listens on "disconnected" | 
+| connected | `connect().connected(Function connected)` |  Listens on "connected" | 
+| disconnected | `connect().disconnected(Function disconnected)` |  Listens on "disconnected" | 
+    
+## Model `find()`
+
+Performs a find query. Returns `Query`.
 
     Model.find(Mixed? filter)
 
@@ -175,12 +211,12 @@ Chainable:
 
 | Name | Example | Description |
 |------|---------|-------------|
-| on | `find().on(String event, Function then)` | Event listener |
-| then | `find().then(Function success, Function? error)` |  Promise shim | 
-| success | `find().success(Function success)` |  Listens on "success" | 
-| error | `find().error(Function error)`  | Listens on "error" | 
-| found | `find().found(Function success)` |  Listens on "success" and Row | 
-| notFound | `find().notFound(Function success)` |  Listens on "success" and ! Row |
+| on | `findOne().on(String event, Function then)` | Event listener |
+| then | `findOne().then(Function success, Function? error)` |  Promise shim | 
+| success | `findOne().success(Function success)` |  Listens on "success" | 
+| error | `findOne().error(Function error)`  | Listens on "error" | 
+| found | `findOne().found(Function success)` |  Listens on "success" and Row | 
+| notFound | `findOne().notFound(Function success)` |  Listens on "success" and ! Row |
 
 
 # Find
