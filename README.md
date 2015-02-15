@@ -274,6 +274,38 @@ Chainable:
 
 #<a name="Find"></a> Find
 
+Extends `Query`
+
+## Find `constructor`
+
+    new narwal.Model().find(Object? filter)
+    
+```js
+
+// Find all
+
+Model.find();
+
+// Sugar for Model.find().filter(Object);
+
+Model.find({ field: 'value' });
+
+// Sugar for Model.find().limit(Number);
+
+Model.find(10);
+```
+
+Events:
+
+- **error** `Error`
+- **success** `[Row]`
+
+## Find `found`
+
+## Find `notFound`
+
+## Find `filter`
+
 # Insert
 
 # Update
