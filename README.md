@@ -19,108 +19,38 @@ var narwal = require('narwal');
 
 # Features
 
-## Model abstraction for MySQL
+`narwal` gives you model abstraction so you manipulate your MySQL data and structure easier.
 
 ```js
-var Player = new narwal.Model('Player', { name: String });
+
+// SELECT name FROM players
+
+new narwal.Model('Player', { name: String }).find();
+
+// INSERT INTO players (name) VALUES('Lara')
+
+new narwal.Model('Player', { name: String }).insert({ name: 'Lara' });
+
+// UPDATE players SET score=100 WHERE name='Lara'
+
+new narwal.Model('Player', { name: String, score: Number }).map({ score: 100 })
+
+// DELETE FROM players WHERE score = 100
+
+new narwal.Model('Player', { score: Number }).filter({ score: 100 }).remove();
 ```
 
-## Model Query API
+`narwal` comes with stream and transform support:
 
 ```js
-Player.insert({ name: 'Lara' });
 
-Player.find({ name: 'Lara' });
-```
+// SELECT all rows from players, save them to a file and insert them into another table
 
-## Connexion support
-
-```js
-Player
-
-  .connect('mysql://mysql@localhost/test')
-
-  .find();
-```
-
-## Events based and promise shim support
-
-```js
-Player
-  
-  .find()
-  
-  .on('error', function ko (error) {})
-  
-  .on('not found', function notFound () {})
-  
-  .on('found', function found (players) {})
-  
-  // promise shim
-  
-  .then(function ok (players) {})
-```
-
-## Array syntax
-
-```js
-Player
-
-  .filter({ name: 'Laura' })
-  
-  .not({ team: { color: 'red' } })
-  
-  .sort({ name: 1 })
-  
-  .limit(1000)
-  
-  .forEach(function (player) {})
-```
-    
-## Stream - write support
-
-```js
-Player
-
+new narwal.Model('Player', { name: String, score: Number })
   .stream()
-  
-  // query 1000 documents at a time
-  
-  .buffer(1000)
-  
-  // maximum memory in bytes - will not resume until maximum memory not available
-  
-  .mem(1024)
-  
-  // stream results in JSON
-  
-  .encoding('utf-8')
-  
-  // pause 10 seconds after each buffer
-  
-  .pause(10000)
-  
-  // write results to a stream
-  
-  .pipe(writableStream);
-```
-
-## Stream - read support
-
-```js
-fs
-  .createReadStream('players.json')
-  .pipe(Player.stream());
-```
-
-## Pipe models
-
-```js
-Player
-  
-  .connect(url1)
-  
-  .pipe(Player.connect(url2));
+  .format('sql')
+  .pipe(fs.createWriteFile('players.sql'))
+  .pipe(new narwal.Model('Player', { name: String, score: Number }).connect('mysql://...'))
 ```
 
 # Usage
