@@ -1,7 +1,7 @@
 n    a    r    w    a    l
 ==========================
 
-!! alpha - do not use (yet) !!
+## alpha - do not use (yet)
 
 `narwal` (NodeJS) is a loosely coupled structure-data architecture for modeling and moving around your MySQL data.
 
@@ -227,178 +227,20 @@ Employee
 
 # [The Model](docs/Model.md)
 
-# Connect
+# [Connect](docs/Connect.md)
 
-## Default credentials
+# [The Query](docs/Query.md)
 
-If you refer to the Model section above, you will see that `narwal` connects by default to `mysql://root@localhost/test`.
+# Find
 
-## Auto-connect
+# Insert
 
-When executing a query, `narwal` will try to connect. If you would use default credentials (which you should not for security reasons), you wouldn't need to call a `connect` method:
+# Update
 
-```js
-// work as is
-var model = new narwal.Model('User', {});
-// mysql://narwal@localhost/narwal/users
-model.find().forEach(function (user) {});
-```
+# Remove
 
-## Credentials format
+# Export / import
 
-Credentials can be passed either a string following the URL format as so:
-
-    mysql://user:password@host:port/dbname
-    
-Or as an object such as:
-
-```js
-var credentials = {
-  "host": String,
-  "port": Number,
-  "user": String,
-  "password": String,
-  "dbname": String
-};
-```
-
-## Ways to connect
-
-To specify another credentials, you have two choices:
-
-### Use cache
-
-You can benefit from npm internal cache mechanism and connect directly from the module:
-
-```js
-var narwal = require('narwal');
-
-narwal.connect('mysql://some-other-host');
-
-// Now in runtime, you don't need to specify again a connexion link
-
-var Player = require('../models/Player');
-
-// Your query will be executed with the declared credentials
-
-Player.find();
-```
-
-### Model level
-
-You can also connect at model level:
-
-```js
-var Player = require('../models/Player');
-
-Player
-  .connect(credentials)
-  .find();
-```
-
-You can switch connections:
-
-```js
-var Player = require('../models/Player');
-
-var rows;
-
-Player
-  
-  // Connect to DB 1
-  
-  .connect(credentials1)
-  
-  // SELECT
-  
-  .find()
-  
-  // On results
-  
-  .found(function foundPlayers (players) {
-    Player
-      
-      // Connect to DB2
-      
-      .connect(credentials2)
-      
-      // Insert results
-      
-      .insert(players);
-  });
-```
-
-If you declare connexions both on module level and on model level, model level will have precedence.
-
-# The Queries
-
-All queries return an instance of Narwal.Query
-
-## The Narwal Query
-
-The query is an emitter. It emits an error event on failure and a success event otherwise.
-
-```js
-Player
-  
-  .find()
-  
-  .on('error', function findPlayerError (error) {
-    throw error;
-  })
-  
-  .on('success', function findPlayerSuccess (players) {
-    console.log(players.length);
-  })
-```
-
-Or you can use the convenient methods `error` and `success`:
-
-```js
-Player
-
-  .find()
-  
-  .error(function findPlayerError (error) {
-    throw error;
-  })
-  
-  .success(function findPlayerSuccess (players) {
-    console.log(players.length);
-  });
-```
-
-Or the `then` method:
-
-```js
-Player
-
-  .find()
-  
-  .then(
-    function findPlayerThen (players) {
-      console.log(players.length):
-    },
-    
-    function findPlayerThenError (error) {
-      throw error;
-    }
-  );
-```
-
-Or you can use the callback syntax:
-
-```js
-Player
-
-  .find(function findPlayerCallback (error, players) {
-    if ( error ) {
-      throw error:
-    }
-    
-    console.log(players.length);
-  });
-```
 
 ## SELECT
 
