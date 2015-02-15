@@ -25,6 +25,13 @@ var narwal = require('narwal');
 var Player = new narwal.Model('Player', { name: String, score: Number });
 ```
 
+To connect to MySQL:
+
+```js
+Player
+  .connect('mysql://user:password@host/db');
+```
+
 ```sql
 SELECT name FROM players WHERE name='Lara' LIMIT 10 ORDER BY score DESC
 ```
