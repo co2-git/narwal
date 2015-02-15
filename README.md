@@ -21,12 +21,23 @@ var narwal = require('narwal');
 
 `narwal` gives you model abstraction so you manipulate your MySQL data and structure easier.
 
+```js
+var Player = new narwal.Model('Player', { name: String, score: Number });
+```
+
 ```sql
-SELECT name FROM players
+SELECT name FROM players WHERE name='Lara' LIMIT 10 ORDER BY score DESC
 ```
 
 ```js
-new narwal.Model('Player', { name: String }).find();
+Player
+  .find()
+  .filter({ name: 'Lara' })
+  .limit(10)
+  .sort({ score: false })
+  .forEach(function (player) {
+    // ...
+  });
 ```
 
 ```sql
@@ -34,7 +45,8 @@ INSERT INTO players (name) VALUES('Lara')
 ```
 
 ```js
-new narwal.Model('Player', { name: String }).insert({ name: 'Lara' });
+Player
+  .insert({ name: 'Lara' });
 ```
 
 ```sql
@@ -42,7 +54,9 @@ UPDATE players SET score=100 WHERE name='Lara'
 ```
 
 ```js
-new narwal.Model('Player', { name: String, score: Number }).map({ score: 100 })
+Player
+  .filter({ name: 'Lara' })
+  .update({ score: 100 })
 ```
 
 ```sql
@@ -50,7 +64,9 @@ DELETE FROM players WHERE score = 100
 ```
 
 ```js
-new narwal.Model('Player', { score: Number }).filter({ score: 100 }).remove();
+Player
+  .filter({ score: 100 })
+  .remove();
 ```
 
 `narwal` comes with stream and transform support:
