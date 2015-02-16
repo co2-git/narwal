@@ -152,18 +152,116 @@ Helpers:
 
 Create a table stucture from Model. Returns `Query`.
 
-    Model.create(Function? callback)
+    Model.create(Object? options, Function? callback)
+
+```sql
+CREATE TABLE players (
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR NOT NULL )
+  ENGINE=MyISAM DEFAULT CHARSET utf-8
+```
+
+```js
+new narwal
+
+  .Model('Player', { name: String })
+  
+  .create();
+```
+
+### Model `create({ id: false })`
+
+Do not create auto id field
+
+```sql
+CREATE TABLE players (
+  name VARCHAR NOT NULL )
+  ENGINE=MyISAM DEFAULT CHARSET utf-8
+```
+
+```js
+new narwal
+  
+  .Model('Player', { name: String })
+  
+  .create({ id: false });
+```
+
+### Model `create({ id: String })`
+
+Use another name for id
+
+```sql
+CREATE TABLE players (
+  player_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR NOT NULL )
+  ENGINE=MyISAM DEFAULT CHARSET utf-8
+```
+
+```js
+new narwal
+  
+  .Model('Player', { name: String })
+  
+  .create({ id: 'player_id' });
+```
+
+### Model `create({ table: String })`
+
+Use another name for table
+
+```sql
+CREATE TABLE players_es (
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR NOT NULL )
+  ENGINE=MyISAM DEFAULT CHARSET utf-8
+```
+
+```js
+new narwal
+  
+  .Model('Player', { name: String })
+  
+  .create({ table: 'players_es' });
+```
+
+### Model `create({ index: String || [String] })`
+
+Create an index
+
+```sql
+CREATE TABLE models (
+  model_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR NOT NULL,
+  INDEX(name))
+  ENGINE=MyISAM DEFAULT CHARSET utf-8
+```
 
 ```js
 
-// Create as is
-Player.create();
-```
+// You could to that at structure level:
 
-Is the same than:
+new narwal
+  
+  .Model('Player', { name: { type: String, index: true } })
+  
+  .create();
+  
+// Or at create level
 
-```sql
-CREATE TABLE models;
+new narwal
+  
+  .Model('Player', { name: String })
+  
+  .create({ index: 'name' });
+  
+// You can index more than one field using an array
+
+new narwal
+  
+  .Model('Player', { name: String, quote: String })
+  
+  .create({ index: ['name', 'quote'] });
 ```
 
 Events:
