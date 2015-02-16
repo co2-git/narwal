@@ -25,13 +25,6 @@ var narwal = require('narwal');
 var Player = new narwal.Model('Player', { name: String, score: Number });
 ```
 
-To connect to MySQL:
-
-```js
-Player
-  .connect('mysql://user:password@host/db');
-```
-
 ```sql
 SELECT name FROM players WHERE name='Lara' LIMIT 10 ORDER BY score DESC
 ```
@@ -113,19 +106,29 @@ Creates a new Narwal Model.
 new narwal.Model('Player', { name: String }, { prefix: 'test_' });
 ```
 
-## Model `connect()`
+## Model `client()`
 
-Create a new MySQL thread.
+MySQL thread setter. Narwal models are connexion-agnostic. Narwal ships with a Service Provider called Client that can handle executing SQL statements -- or postpone their execution based on events. It is built upon node mysql module. View Agent. 
 
-Returns `Model`.
-
-    Model.connect(String url, Function? callback)
+    Model.client(Client)
 
 ```js
 
-// Connect to custom URL
+// Connect with node mysql module
 
-Model.connect('mysql://user:password@host:port/db');
+var Player = require('./models/Player');
+
+var Client = require('narwal').Client;
+
+Player
+
+  .agent(new Client('mysql://mysql@localhost/db', { pool: true }))
+
+  .find(5)
+  
+  .inc('score', 100)
+  
+  .forEach(function (player) {});
 ```
 
 Events:
@@ -138,8 +141,8 @@ Helpers:
 
 | Name | Example | Description |
 |------|---------|-------------|
-| connected | `connect().connected(Function connected)` |  Listens on "connected" | 
-| disconnected | `connect().disconnected(Function disconnected)` |  Listens on "disconnected" | 
+| connected | `client().connected(Function connected)` |  Listens on "connected" | 
+| disconnected | `client().disconnected(Function disconnected)` |  Listens on "disconnected" | 
 
 ## Model `create()`
 
