@@ -122,7 +122,7 @@ var Client = require('narwal').Client;
 
 Player
 
-  .agent(new Client('mysql://mysql@localhost/db', { pool: true }))
+  .client(new Client('mysql://mysql@localhost/db', { pool: true }))
 
   .find(5)
   
