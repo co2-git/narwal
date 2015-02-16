@@ -288,14 +288,10 @@ Events:
 - **error** `Error`
 - **success** `[Row]`
 
-Chainable:
+Helpers:
 
 | Name | Example | Description |
 |------|---------|-------------|
-| on | `find().on(String event, Function then)` | Event listener |
-| then | `find().then(Function success, Function? error)` |  Promise shim | 
-| success | `find().success(Function success)` |  Listens on "success" | 
-| error | `find().error(Function error)`  | Listens on "error" | 
 | found | `find().found(Function success)` |  Listens on "success" and [Row].length | 
 | notFound | `find().notFound(Function success)` |  Listens on "success" and ! [Row].length | 
 | forEach | `find().forEach(function (model) { //... }})` | Listens on "success" and for each [Row] |
@@ -326,14 +322,10 @@ Events:
 - **error** `Error`
 - **success** `[Row]`
 
-Chainable:
+Helpers:
 
 | Name | Example | Description |
 |------|---------|-------------|
-| on | `find().on(String event, Function then)` | Event listener |
-| then | `find().then(Function success, Function? error)` |  Promise shim | 
-| success | `find().success(Function success)` |  Listens on "success" | 
-| error | `find().error(Function error)`  | Listens on "error" | 
 | found | `find().found(Function success)` |  Listens on "success" and [Row].length | 
 | notFound | `find().notFound(Function success)` |  Listens on "success" and ! [Row].length | 
 | forEach | `find().forEach(function (model) { //... }})` | Listens on "success" and for each [Row] |
