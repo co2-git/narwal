@@ -106,7 +106,7 @@ Creates a new Narwal Model.
 new narwal.Model('Player', { name: String }, { prefix: 'test_' });
 ```
 
-## Model `connect()`
+## `Model` `connect()`
 
 MySQL thread setter. Narwal models are connexion-agnostic. We use [node-mysql](https://github.com/felixge/node-mysql/) default connection method for the moment. Future implementations to come.
 
@@ -116,15 +116,9 @@ MySQL thread setter. Narwal models are connexion-agnostic. We use [node-mysql](h
 
 var Player = require('./models/Player');
 
-Player
+Player.forEach(fn);
 
-  .find(5)
-  
-  .inc('score', 100)
-  
-  .forEach(function (player) {})
-  
-  .connect('mysql://user@localost/db');
+Player.connect('mysql://user@localost/db');
   
 // You can also a Narwal client
 
