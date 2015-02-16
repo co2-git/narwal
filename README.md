@@ -1,7 +1,9 @@
 n    a    r    w    a    l
 ==========================
 
-`narwal` is a Object Model library for MySQL.
+## alpha - do not use (yet)
+
+`narwal` (NodeJS) is a loosely coupled structure-data architecture for modeling and moving around your MySQL data.
 
 # Install
 
@@ -9,301 +11,396 @@ n    a    r    w    a    l
 npm install narwal
 ```
 
-# Usage
-
-First, create models of your database structure. Let's take the infamous `employees` table:
-
+# Use
 
 ```js
-
 var narwal = require('narwal');
-
-var Employee = new narwal.Model('Employee', {
-  
-  'first_name': {
-    type: String,
-    required: true
-  },
-
-  'last_name': {
-    type: String,
-    required: true
-  },
-
-  'dob': {
-    type: Date,
-    required: true
-  }
-
-});
 ```
 
-Now it's easy to query your Employee model:
+# Overview
+
+`narwal` gives you model abstraction so you manipulate your MySQL data and structure easier.
 
 ```js
-// SELECT * FROM employees
-
-Employee.forEach(function (employee) {
-  // ...
-});
-
-// UPDATE employees SET last_name='Johnson' WHERE last_name='Jackson';
-
-Employee.update({ last_name: 'Jackson' }, { last_name: 'Johnson' });
-
-// INSERT INTO employees VALUES('Chihiro', 'Ono')
-
-Employee.insert({ first_name: 'Chihiro', last_name: 'Ono' });
-
-// DELETE FROM employees WHERE last_name='Johnson';
-
-Employee.remove({ last_name: 'Johnson' })
-
+var Player = new narwal.Model('Player', { name: String, score: Number });
 ```
 
-# The Model
-
-## Best practices
-
-It is best to saved any model in its own file such as:
+To connect to MySQL:
 
 ```js
-// file: models/Player.js
-
-! function () {
-  
-  'use strict';
-
-  var narwal = require('narwal');
-
-  module.exports = new narwal.Model('Player', {
-    name: String,
-    score: Number,
-    dob: Date
-  });
-
-} ();
+Player
+  .connect('mysql://user:password@host/db');
 ```
-
-Then it is easy to interact with this model from another file using `require`:
-
-```js
-// some other file
-
-var Player = require('./models/Player');
-
-Player.forEach(console.log.bind(console));
-```
-
-## The constructor
-
-```js
-new narwal.Model(String name, Object schema, Object options);
-```
-
-### @arg name
-
-The name of the Model. By default, `narwal` will map this name with a table name in the following fashion: the name is put to lower case and a 's' is added to it. Hence, `new narwal.Model('Player')` will be mapped to the table `players`.
-
-You can overwrite that if you want to map your model to a different table. See the options section below.
-
-### @arg schema
-
-View schema section below
-
-### @arg options
-
-An object that can have the following properties:
-
-| Property  | Description             | Type      |
-|-----------|-------------------------|-----------|
-| table     | The name of the table   | String    |
-
-
-## The schema
-
-Consider the following in MySQL:
 
 ```sql
--- MySQL DDL
-
-CREATE TABLE `players` (
-  id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(255) NOT NULL,
-  score INT(11) NOT NULL,
-  dob TIMESTAMP NOT NULL
-);
+SELECT name FROM players WHERE name='Lara' LIMIT 10 ORDER BY score DESC
 ```
-
-This is how to map it:
-
-```js
-
-// Long field-definition syntax:
-new narwal.Model('Player', {
-  name: {
-    type: String
-  },
-  score: {
-    type: Number
-  },
-  dob: {
-    type: Date
-  }
-});
-
-
-// Short field-definition syntax:
-
-new narwal.Model('Player', {
-  name: String,
-  score: Number,
-  dob: Date
-});
-```
-
-### Data types
-
-| Type      | MySQL           |
-|-----------|-----------------|
-| String    | VARCHAR(255)    |
-| Number    | INT(11)         |
-| Date      | TIMESTAMP       |
-
-If you need to use other data types, just enter them as a string:
-
-```js
-{
-  "lat": {
-    type: "decimal(9,6)"
-  }
-}
-
-// or, short-syntax
-{
-  "lat": "decimal(9,6)"
-}
-```
-
-### Required
-
-You can mark a field as required:
-
-```js
-new narwal.Model('Player', {
-  "name": {
-    type: String,
-    required: true
-  }
-);
-```
-
-### Specify a field name
-
-You can choose to use a different field name:
-
-```js
-new narwal.Model('Player', {
-  "name": {
-    type: String,
-    field: 'player_name'
-  }
-);
-```
-
-### Join and reference
-
-You can join two or more tables together:
-
-```js
-var Category = new narwal.Model('Category', { name: String, code: Number });
-
-var Product = new narwal.Model('Product', { name: String, category: Category });
-```
-
-By default, `narwal` joins a reference table to its `id` field. You can specify another field however:
-
-```js
-new narwal.Model('Product', {
-  // JOIN products.category to 
-  category: {
-    ref: Category,
-    on: 'code' // default: 'id'
-  }
-});
-```
-
-# The Queries
-
-All queries return an instance of Narwal.Query
-
-## The Narwal Query
-
-The query is an emitter. It emits an error event on failure and a success event otherwise.
 
 ```js
 Player
-  
   .find()
-  
-  .on('error', function (error) {
-    throw error;
-  })
-  
-  .on('success', function (players) {
-    console.log(players.length);
-  })
-```
-
-Or you can use the convenient methods `error` and `success`:
-
-```js
-Player
-
-  .find()
-  
-  .error(function (error) {
-    throw error;
-  })
-  
-  .success(function (players) {
-    console.log(players.length);
+  .filter({ name: 'Lara' })
+  .limit(10)
+  .sort({ score: false })
+  .forEach(function (player) {
+    // ...
   });
 ```
 
-Or the `then` method:
+```sql
+INSERT INTO players (name) VALUES('Lara')
+```
 
 ```js
 Player
-
-  .find()
-  
-  .then(
-    function (players) {
-      console.log(players.length):
-    },
-    
-    function (error) {
-      throw error;
-    }
-  );
+  .insert({ name: 'Lara' });
 ```
 
-Or you can use the callback syntax:
+```sql
+UPDATE players SET score=100 WHERE name='Lara'
+```
 
 ```js
 Player
-
-  .find(function (error, players) {
-    if ( error ) {
-      throw error:
-    }
-    
-    console.log(players.length);
-  });
+  .filter({ name: 'Lara' })
+  .update({ score: 100 })
 ```
+
+```sql
+DELETE FROM players WHERE score = 100
+```
+
+```js
+Player
+  .filter({ score: 100 })
+  .remove();
+```
+
+`narwal` comes with stream and transform support:
+
+```js
+
+// SELECT all rows from players, save them to a file and insert them into another table
+
+new narwal.Model('Player', { name: String, score: Number })
+  .stream()
+  .format('sql')
+  .pipe(fs.createWriteFile('players.sql'))
+  .pipe(new narwal.Model('Player', { name: String, score: Number }).connect('mysql://...'))
+```
+
+# [The Model](docs/Model.md)
+
+# [Connect](docs/Connect.md)
+
+# [The Query](docs/Query.md)
+
+# Model
+
+## Model `constructor`
+
+Creates a new Narwal Model.
+
+    new narwal.Model(String name, Object? structure, Object? options);
+
+| Argument | Type | Required | Default | Description |
+|----------|------|----------|---------|-------------|
+| name | String | ✔ | | The name of the model |
+| structure | Object | ✖ | `{}` | The structure |
+| options | Object | ✖ | `{}` | Model options |
+
+```js
+new narwal.Model('Player', { name: String }, { prefix: 'test_' });
+```
+
+## Model `connect()`
+
+Create a new MySQL thread.
+
+Returns `Model`.
+
+    Model.connect(String url, Function? callback)
+
+```js
+
+// Connect to custom URL
+
+Model.connect('mysql://user:password@host:port/db');
+```
+
+Events:
+
+- **error** `Error`
+- **connected**
+- **disconnected**
+
+Helpers:
+
+| Name | Example | Description |
+|------|---------|-------------|
+| connected | `connect().connected(Function connected)` |  Listens on "connected" | 
+| disconnected | `connect().disconnected(Function disconnected)` |  Listens on "disconnected" | 
+
+## Model `create()`
+
+Create a table stucture from Model. Returns `Query`.
+
+    Model.create(Function? callback)
+
+```js
+
+// Create as is
+Player.create();
+```
+
+Is the same than:
+
+```sql
+CREATE TABLE models;
+```
+
+Events:
+
+- **error** `Error`
+- **success**
+
+Helpers:
+
+| Name | Example | Description |
+|------|---------|-------------|
+| created | `create().created(Function success)` |  Listens on "success" |
+    
+## Model `find()`
+
+Performs a find query. Returns [`Find`](#Find).
+
+    Model.find(Mixed? filter)
+
+```js
+
+// Find all
+
+Model.find();
+
+// Sugar for Model.find().filter(Object);
+
+Model.find({ field: 'value' });
+
+// Sugar for Model.find().limit(Number);
+
+Model.find(10);
+```
+
+Events:
+
+- **error** `Error`
+- **success** `[Row]`
+
+Chainable:
+
+| Name | Example | Description |
+|------|---------|-------------|
+| on | `find().on(String event, Function then)` | Event listener |
+| then | `find().then(Function success, Function? error)` |  Promise shim | 
+| success | `find().success(Function success)` |  Listens on "success" | 
+| error | `find().error(Function error)`  | Listens on "error" | 
+| found | `find().found(Function success)` |  Listens on "success" and [Row].length | 
+| notFound | `find().notFound(Function success)` |  Listens on "success" and ! [Row].length | 
+| forEach | `find().forEach(function (model) { //... }})` | Listens on "success" and for each [Row] |
+
+## Model `findById()`
+
+Performs a find query with a filter by id. Returns `Query`.
+
+    Model.findById(Number)
+
+```js
+
+// Find by id
+
+Model.findById(3837283);
+```
+
+Events:
+
+- **error** `Error`
+- **success** `[Row]`
+
+Chainable:
+
+| Name | Example | Description |
+|------|---------|-------------|
+| on | `findById().on(String event, Function then)` | Event listener |
+| then | `findById().then(Function success, Function? error)` |  Promise shim | 
+| success | `findById().success(Function success)` |  Listens on "success" | 
+| error | `findById().error(Function error)`  | Listens on "error" | 
+| found | `findById().found(Function success)` |  Listens on "success" and [Row].length | 
+| notFound | `findById().notFound(Function success)` |  Listens on "success" and ! [Row].length | 
+| forEach | `findById().forEach(function (model) { //... }})` | Listens on "success" and for each [Row] |
+
+## Model findOne
+
+Performs a find query and returns first found. Returns Query. Success emits a Row object.
+
+    Model.findOne(Mixed? filter)
+
+```js
+
+// Find one with no filter
+
+Model.findOne();
+
+// Sugar for Model.findOne().filter(Object);
+
+Model.findOne({ field: 'value' });
+```
+
+Events:
+
+- **error** `Error`
+- **success** `Row`
+
+Chainable:
+
+| Name | Example | Description |
+|------|---------|-------------|
+| on | `findOne().on(String event, Function then)` | Event listener |
+| then | `findOne().then(Function success, Function? error)` |  Promise shim | 
+| success | `findOne().success(Function success)` |  Listens on "success" | 
+| error | `findOne().error(Function error)`  | Listens on "error" | 
+| found | `findOne().found(Function success)` |  Listens on "success" and Row | 
+| notFound | `findOne().notFound(Function success)` |  Listens on "success" and ! Row |
+
+
+#<a name="Find"></a> Find
+
+Extends `Query`
+
+## Find `constructor`
+
+    new narwal.Model().find(Object? filter)
+    
+```js
+
+// Find all
+
+Model.find();
+
+// Sugar for Model.find().filter(Object);
+
+Model.find({ field: 'value' });
+
+// Sugar for Model.find().limit(Number);
+
+Model.find(10);
+```
+
+Events:
+
+- **error** `Error`
+- **success** `[Row]`
+
+## Find `found`
+
+## Find `notFound`
+
+## Find `filter`
+
+# Insert
+
+# Update
+
+# Remove
+
+# Export / import
+
 
 ## SELECT
+
+### The Array approach
+
+When retrieving an array of rows, you can favor a syntax that looks more closely like arrays in JavaScript:
+
+```sql
+SELECT * FROM players
+```
+
+```js
+Player.forEach(function forEachPlayer (player) {
+  // ...
+});
+```
+
+```sql
+SELECT * FROM players WHERE first_name='Jack'
+```
+
+```js
+Player
+  .filter({ first_name: 'Jack' })
+  .forEach(forEachPlayer);
+```
+
+
+```sql
+SELECT * FROM players WHERE first_name!='Jack' LIMIT 10
+```
+
+```js
+Player
+  .not({ first_name: 'Jack' })
+  .limit(10)
+  .forEach(forEachPlayer);
+```
+
+```sql
+SELECT * FROM players WHERE first_name!='Jack' LIMIT 10 ORDER BY dob DESC, id ASC
+```
+
+```js
+Player
+  .not({ "first_name": 'Jack' })
+  .limit()
+  .sort({ "dob": false, "id": true })
+  .forEach(forEachPlayer);
+```
+
+## The Stream approach
+
+You can stream data:
+
+```js
+
+// This will save the entire table to /tmp/players.json
+
+Player
+  .stream()
+  .pipe(require('fs').createWriteStream('/tmp/players.json'));
+```
+
+You can use built-in transformers and other transformers:
+
+```js
+
+// This will save the entire table to /tmp/players.sql
+
+Player
+  .stream('sql')
+  .pipe(zlib.createGunzip())
+  .pipe(fs.createWriteStream('/tmp/players.tar.gz'));
+```
+
+Now let's reinject our JSON file into the Model:
+
+```js
+fs.createReadStream('/tmp/players.json')
+  .pipe(Player.stream())
+  .on('end', function () {
+    console.log('Import complete!');
+  });
+```
+
+## Find
 
 You can perform a select method using the `find()` method. On success, it will emit an array of rows.
 
@@ -316,34 +413,11 @@ Player
   
   .find()
   
-  .success(function (players) {
+  .success(function findPlayerSuccess (players) {
     // ...
   });
 ```
 
-### forEach
-
-Since `find()` returns an array, you can use the convenient method `forEach` to walk them:
-
-```js
-Player
-  
-  .find()
-  
-  .forEach(function (player) {
-    console.log(player.name);
-  });
-```
-
-You can omit the `find()` method:
-
-```js
-Player
-  
-  .forEach(function (player) {
-    console.log(player.name);
-  });
-```
 
 ### SELECT ... WHERE
 
@@ -381,7 +455,7 @@ Player
 
   .findOne()
   
-  .then(function(player) {
+  .then(function findOnePlayerThen (player) {
     // ...
   });
 ```
@@ -399,7 +473,7 @@ Player
 
   .findById(2000)
   
-  .then(function(player) {
+  .then(function findPlayerByIdThen (player) {
     // ...
   });
 ```
@@ -419,7 +493,7 @@ Player
   
   .select('id', 'score')
   
-  .forEach(function (player) {} );
+  .forEach(function forEachPlayer (player) {} );
 ```
 
 ### UNSELECT FIELDS
@@ -437,7 +511,7 @@ Player
   
   .select('-id')
   
-  .forEach(function (player) {} );
+  .forEach(function forEachPlayer (player) {} );
 ```
 
 ### SELECT COLUMNS AS
@@ -539,7 +613,7 @@ Player
 
   .insert({ name: 'Rebecca' })
   
-  .then(function (Rebecca) {
+  .then(function insertPlayerThen (Rebecca) {
     // ...
   });
 ```
@@ -595,7 +669,7 @@ UPDATE players SET name=LOWER(name) WHERE players.team=(SELECT teams.id FROM tea
 ```js
 Player
 
-  .update({ "name": function (name) { return name.toLowerCase(); } })
+  .update({ "name": function nameToLowerCase (name) { return name.toLowerCase(); } })
   
   .where({ "team": { "name": "Red" } });
 ```
@@ -603,3 +677,50 @@ Player
 # Remove
 
 # Create
+
+# Dump
+
+You can simulate a dump statement
+
+```js
+Player.dump();
+```
+
+This will return a stream containing the dump
+
+```js
+Player.dump().pipe(process.stdout);
+```
+
+By default, dump contains data and structure. Example of a dump:
+
+```sql
+-- dump generated by narwal date
+
+-- structure
+
+CREATE TABLE IF NOT EXISTS players (...);
+
+-- data
+
+INSERT INTO players VALUES (...);
+```
+
+# Backup
+
+You can backup a table using narwal. It will gzip a folder with two files in it:
+
+- `data.sql` The MySQL dump of the data of the table
+- `structure.js` A Narwal model file
+
+```js
+Player.export();
+```
+
+This does not save the gzip anywhere but returns a stream of the gzip that can be handled by chain:
+
+```js
+Player.export().pipe(unzipTransformStream).pipe(writableStream);
+```
+
+Gzips are n by default as *narwal-`Model`-`YY`-`MM`-`DD`-`HH`-`II`-`SS`.tar.gz*
