@@ -12,8 +12,10 @@
 
     var user = 'narwal';
 
+    var dbname = 'narwal';
+
     before(function () {
-      pool = new Pool('mysql://' + user + '@' + host);
+      pool = new Pool('mysql://' + user + '@' + host + '/' + dbname);
     });
 
     it ( 'should emit a connected event' , function (done) {
@@ -26,11 +28,11 @@
       });
     });
 
-    it ( 'should be an instance of Pool', function () {
+    it ( 'should be an instance of Pool' , function () {
       (pool)  .should.be.an.instanceof(Pool);
     });
 
-    it ( 'should have an options object', function () {
+    it ( 'should have an options object' , function () {
       (pool)  .should.have.property('options')
               .which.is.an.Object;
     });

@@ -18,13 +18,13 @@
       Pool.prototype.constructor.name.should.eql('Pool');
     });
 
-    it ( 'which extends EventEmitter', function () {
+    it ( 'which extends EventEmitter' , function () {
       Pool.prototype.should.be.an.instanceof(require('events').EventEmitter);
     });
 
-    describe('Pool methods', function () {
+    describe ( 'Pool methods' , function () {
 
-      it ( 'should have a getConnection method', function () {
+      it ( 'should have a getConnection method' , function () {
         Pool.prototype.getConnection.should.be.a.Function;
       });
 
