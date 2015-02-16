@@ -106,29 +106,33 @@ Creates a new Narwal Model.
 new narwal.Model('Player', { name: String }, { prefix: 'test_' });
 ```
 
-## Model `client()`
+## Model `connect()`
 
-MySQL thread setter. Narwal models are connexion-agnostic. Narwal ships with a Service Provider called Client that can handle executing SQL statements -- or postpone their execution based on events. It is built upon node mysql module. View Agent. 
+MySQL thread setter. Narwal models are connexion-agnostic. We use [node-mysql](https://github.com/felixge/node-mysql/) default connection method for the moment. Future implementations to come.
 
-    Model.client(Client)
+    Model.connect(String | Object);
 
 ```js
 
-// Connect with node mysql module
-
 var Player = require('./models/Player');
 
-var Client = require('narwal').Client;
-
 Player
-
-  .client(new Client('mysql://mysql@localhost/db', { pool: true }))
 
   .find(5)
   
   .inc('score', 100)
   
-  .forEach(function (player) {});
+  .forEach(function (player) {})
+  
+  .connect('mysql://user@localost/db');
+  
+// You can also a Narwal client
+
+var Client = require('narwal').Client;
+
+var client = new Client('mysql://user@localost/db');
+
+Player.connect(client).stream().limit(100000).rows(1000);
 ```
 
 Events:
