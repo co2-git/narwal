@@ -94,7 +94,7 @@ new narwal.Model('Player', { name: String, score: Number })
 
 Creates a new Narwal Model.
 
-    new narwal.Model(String name, Object? structure, Object? options);
+    {Model} new narwal.Model(String name, Object? structure, Object? options);
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
@@ -106,11 +106,11 @@ Creates a new Narwal Model.
 new narwal.Model('Player', { name: String }, { prefix: 'test_' });
 ```
 
-## `Model` `connect()`
+## Model `connect()`
 
 MySQL thread setter. Narwal models are connexion-agnostic. We use [node-mysql](https://github.com/felixge/node-mysql/) default connection method for the moment. Future implementations to come.
 
-    Model.connect(String | Object);
+    {Model} Model.connect(String | Object);
 
 ```js
 
@@ -146,7 +146,7 @@ Helpers:
 
 Create a table stucture from Model. Returns `Query`.
 
-    Model.create(Object? options, Function? callback)
+    {Query} Model.create(Object? options, Function? callback)
 
 ```sql
 CREATE TABLE players (
@@ -268,12 +268,43 @@ Helpers:
 | Name | Example | Description |
 |------|---------|-------------|
 | created | `create().created(Function success)` |  Listens on "success" |
+
+## Model `filter()`
+
+Performs a filter query. Returns [`Query`](#Query).
+
+    {Query} Model.filter(Object filter)
+    
+```sql
+SELECT FROM models WHERE field='value'
+```
+
+```js
+Model.filter({ field: 'value' });
+```
+
+Events:
+
+- **error** `Error`
+- **success** `[Row]`
+
+Chainable:
+
+| Name | Example | Description |
+|------|---------|-------------|
+| on | `find().on(String event, Function then)` | Event listener |
+| then | `find().then(Function success, Function? error)` |  Promise shim | 
+| success | `find().success(Function success)` |  Listens on "success" | 
+| error | `find().error(Function error)`  | Listens on "error" | 
+| found | `find().found(Function success)` |  Listens on "success" and [Row].length | 
+| notFound | `find().notFound(Function success)` |  Listens on "success" and ! [Row].length | 
+| forEach | `find().forEach(function (model) { //... }})` | Listens on "success" and for each [Row] |
     
 ## Model `find()`
 
 Performs a find query. Returns [`Find`](#Find).
 
-    Model.find(Mixed? filter)
+    {Query} Model.find(Mixed? filter)
 
 ```js
 
