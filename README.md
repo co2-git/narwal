@@ -25,13 +25,6 @@ var narwal = require('narwal');
 var Player = new narwal.Model('Player', { name: String, score: Number });
 ```
 
-To connect to MySQL:
-
-```js
-Player
-  .connect('mysql://user:password@host/db');
-```
-
 ```sql
 SELECT name FROM players WHERE name='Lara' LIMIT 10 ORDER BY score DESC
 ```
@@ -101,7 +94,7 @@ new narwal.Model('Player', { name: String, score: Number })
 
 Creates a new Narwal Model.
 
-    new narwal.Model(String name, Object? structure, Object? options);
+    {Model} new narwal.Model(String name, Object? structure, Object? options);
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
@@ -115,17 +108,25 @@ new narwal.Model('Player', { name: String }, { prefix: 'test_' });
 
 ## Model `connect()`
 
-Create a new MySQL thread.
+MySQL thread setter. Narwal models are connexion-agnostic. We use [node-mysql](https://github.com/felixge/node-mysql/) default connection method for the moment. Future implementations to come.
 
-Returns `Model`.
-
-    Model.connect(String url, Function? callback)
+    {Model} Model.connect(String | Object);
 
 ```js
 
-// Connect to custom URL
+var Player = require('./models/Player');
 
-Model.connect('mysql://user:password@host:port/db');
+Player.forEach(fn);
+
+Player.connect('mysql://user@localost/db');
+  
+// You can also a Narwal client
+
+var Client = require('narwal').Client;
+
+var client = new Client('mysql://user@localost/db');
+
+Player.connect(client).stream().limit(100000).rows(1000);
 ```
 
 Events:
@@ -138,25 +139,123 @@ Helpers:
 
 | Name | Example | Description |
 |------|---------|-------------|
-| connected | `connect().connected(Function connected)` |  Listens on "connected" | 
-| disconnected | `connect().disconnected(Function disconnected)` |  Listens on "disconnected" | 
+| connected | `client().connected(Function connected)` |  Listens on "connected" | 
+| disconnected | `client().disconnected(Function disconnected)` |  Listens on "disconnected" | 
 
 ## Model `create()`
 
 Create a table stucture from Model. Returns `Query`.
 
-    Model.create(Function? callback)
+    {Query} Model.create(Object? options, Function? callback)
+
+```sql
+CREATE TABLE players (
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR NOT NULL )
+  ENGINE=MyISAM DEFAULT CHARSET utf-8
+```
+
+```js
+new narwal
+
+  .Model('Player', { name: String })
+  
+  .create();
+```
+
+### Model `create({ id: false })`
+
+Do not create auto id field
+
+```sql
+CREATE TABLE players (
+  name VARCHAR NOT NULL )
+  ENGINE=MyISAM DEFAULT CHARSET utf-8
+```
+
+```js
+new narwal
+  
+  .Model('Player', { name: String })
+  
+  .create({ id: false });
+```
+
+### Model `create({ id: String })`
+
+Use another name for id
+
+```sql
+CREATE TABLE players (
+  player_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR NOT NULL )
+  ENGINE=MyISAM DEFAULT CHARSET utf-8
+```
+
+```js
+new narwal
+  
+  .Model('Player', { name: String })
+  
+  .create({ id: 'player_id' });
+```
+
+### Model `create({ table: String })`
+
+Use another name for table
+
+```sql
+CREATE TABLE players_es (
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR NOT NULL )
+  ENGINE=MyISAM DEFAULT CHARSET utf-8
+```
+
+```js
+new narwal
+  
+  .Model('Player', { name: String })
+  
+  .create({ table: 'players_es' });
+```
+
+### Model `create({ index: String || [String] })`
+
+Create an index
+
+```sql
+CREATE TABLE models (
+  model_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR NOT NULL,
+  INDEX(name))
+  ENGINE=MyISAM DEFAULT CHARSET utf-8
+```
 
 ```js
 
-// Create as is
-Player.create();
-```
+// You could to that at structure level:
 
-Is the same than:
+new narwal
+  
+  .Model('Player', { name: { type: String, index: true } })
+  
+  .create();
+  
+// Or at create level
 
-```sql
-CREATE TABLE models;
+new narwal
+  
+  .Model('Player', { name: String })
+  
+  .create({ index: 'name' });
+  
+// You can index more than one field using an array
+
+new narwal
+  
+  .Model('Player', { name: String, quote: String })
+  
+  .create({ index: ['name', 'quote'] });
 ```
 
 Events:
@@ -169,12 +268,39 @@ Helpers:
 | Name | Example | Description |
 |------|---------|-------------|
 | created | `create().created(Function success)` |  Listens on "success" |
+
+## Model `filter()`
+
+Performs a filter query. Returns [`Query`](#Query).
+
+    {Query} Model.filter(Object filter)
+    
+```sql
+SELECT FROM models WHERE field='value'
+```
+
+```js
+Model.filter({ field: 'value' });
+```
+
+Events:
+
+- **error** `Error`
+- **success** `[Row]`
+
+Helpers:
+
+| Name | Example | Description |
+|------|---------|-------------|
+| found | `find().found(Function success)` |  Listens on "success" and [Row].length | 
+| notFound | `find().notFound(Function success)` |  Listens on "success" and ! [Row].length | 
+| forEach | `find().forEach(function (model) { //... }})` | Listens on "success" and for each [Row] |
     
 ## Model `find()`
 
 Performs a find query. Returns [`Find`](#Find).
 
-    Model.find(Mixed? filter)
+    {Query} Model.find(Mixed? filter)
 
 ```js
 
@@ -196,14 +322,10 @@ Events:
 - **error** `Error`
 - **success** `[Row]`
 
-Chainable:
+Helpers:
 
 | Name | Example | Description |
 |------|---------|-------------|
-| on | `find().on(String event, Function then)` | Event listener |
-| then | `find().then(Function success, Function? error)` |  Promise shim | 
-| success | `find().success(Function success)` |  Listens on "success" | 
-| error | `find().error(Function error)`  | Listens on "error" | 
 | found | `find().found(Function success)` |  Listens on "success" and [Row].length | 
 | notFound | `find().notFound(Function success)` |  Listens on "success" and ! [Row].length | 
 | forEach | `find().forEach(function (model) { //... }})` | Listens on "success" and for each [Row] |
