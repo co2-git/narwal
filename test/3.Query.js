@@ -28,8 +28,8 @@
         Query.prototype.exec.should.be.a.Function;
       });
 
-      it ( 'should have a make method', function () {
-        Query.prototype.make.should.be.a.Function;
+      it ( 'should have a create method', function () {
+        Query.prototype.create.should.be.a.Function;
       });
 
       it ( 'should have a error method', function () {
