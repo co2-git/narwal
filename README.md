@@ -82,12 +82,6 @@ new narwal.Model('Player', { name: String, score: Number })
   .pipe(new narwal.Model('Player', { name: String, score: Number }).connect('mysql://...'))
 ```
 
-# [The Model](docs/Model.md)
-
-# [Connect](docs/Connect.md)
-
-# [The Query](docs/Query.md)
-
 # Model
 
 ## Model `constructor`
