@@ -336,3 +336,4 @@ Helpers:
 | found | `limit().found(Function success)` |  Listens on "success" and `[Row].length` | 
 | notFound | `limit().notFound(Function success)` |  Listens on "success" and `! [Row].length` |
 | forEach | `find().forEach(function (model) { //... }})` | Listens on "success" and for each [Row] |
+
