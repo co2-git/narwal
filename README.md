@@ -36,7 +36,7 @@ SELECT name FROM players WHERE score > 100 LIMIT 10 ORDER BY joined DESC
 Player // SELECT
   
   // LIMIT 10
-  .find(10)
+  .filter(10)
   
   // WHERE score > 100
   .above({ 'score': 100 })
