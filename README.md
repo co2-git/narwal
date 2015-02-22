@@ -349,7 +349,7 @@ Helpers:
 | found | `findById().found(Function success)` |  Listens on "success" and [Row].length | 
 | notFound | `findById().notFound(Function success)` |  Listens on "success" and ! [Row].length |
 
-## Model findOne
+## Model `findOne()`
 
 Performs a find query and returns first found. Returns Query. Success emits a Row object.
 
@@ -377,3 +377,33 @@ Helpers:
 |------|---------|-------------|
 | found | `findOne().found(Function success)` |  Listens on "success" and Row | 
 | notFound | `findOne().notFound(Function success)` |  Listens on "success" and ! Row |
+
+## Model `limit()`
+
+Apply a limit filter. Returns Query. Success emits `[Row]`.
+
+    {Query} Model.limit(Number limit).success([Row])
+
+```js
+
+// Find 10
+
+Model.limit(10);
+
+// Find one (will return an array, even if it has only one row in it)
+
+Model.limit(1);
+```
+
+Events:
+
+- **error** `Error`
+- **success** `[Row]`
+
+Helpers:
+
+| Name | Example | Description |
+|------|---------|-------------|
+| found | `limit().found(Function success)` |  Listens on "success" and `[Row].length` | 
+| notFound | `limit().notFound(Function success)` |  Listens on "success" and `! [Row].length` |
+| forEach | `find().forEach(function (model) { //... }})` | Listens on "success" and for each [Row] |
