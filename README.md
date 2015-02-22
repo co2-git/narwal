@@ -34,20 +34,25 @@ SELECT name FROM players WHERE score > 100 LIMIT 10 ORDER BY joined DESC
 
 ```js
 Player // SELECT
+
+  // column selection
   
-  // LIMIT 10
-  .filter(10)
-  
-  // WHERE score > 100
-  .above({ 'score': 100 })
-  
-  // ORDER BY joined DESC
-  .sort({ 'joined': false })
-  
-  // select only name column
   .select('name')
   
+  // WHERE score > 100
+  
+  .above({ 'score': 100 })
+  
+  // LIMIT 10
+  
+  .filter(10)
+  
+  // ORDER BY joined DESC
+  
+  .sort({ 'joined': false })
+  
   // Do something with the results
+  
   .forEach(function (player) {
     console.log(player);
   });
