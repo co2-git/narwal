@@ -22,19 +22,31 @@ var narwal = require('narwal');
 `narwal` gives you model abstraction so you manipulate your MySQL data and structure easier.
 
 ```js
-var Player = new narwal.Model('Player', { name: String, score: Number });
+// Create a model representation of a table called players
+// This table must exists with a matching structure as the one modelized
+
+var Player = new narwal.Model('Player', { name: String, score: Number, joined: Date });
 ```
 
 ```sql
-SELECT name FROM players WHERE name='Lara' LIMIT 10 ORDER BY score DESC
+SELECT name FROM players WHERE score > 100 LIMIT 10 ORDER BY joined DESC
 ```
 
 ```js
-Player
-  .find()
-  .filter({ name: 'Lara' })
-  .limit(10)
-  .sort({ score: false })
+Player // SELECT
+  
+  // LIMIT 10
+  .find(10)
+  
+  // WHERE score > 100
+  .above({ 'score': 100 })
+  
+  // ORDER BY joined DESC
+  .sort({ 'joined': false })
+  
+  // select only name column
+  .select('name')
+  
   .forEach(function (player) {
     // ...
   });
@@ -46,7 +58,10 @@ INSERT INTO players (name) VALUES('Lara')
 
 ```js
 Player
-  .insert({ name: 'Lara' });
+
+  .push({ name: 'Lara' })
+  
+  .pushed(function (player) {});
 ```
 
 ```sql
@@ -55,8 +70,22 @@ UPDATE players SET score=100 WHERE name='Lara'
 
 ```js
 Player
+  
   .filter({ name: 'Lara' })
-  .update({ score: 100 })
+  
+  .update({ score: 100 });
+  
+// Update can be used only
+
+Player.update({ name: 'Lara' }, { score: 100 });
+  
+// Then can be invoked as well
+
+Player
+  
+  .where({ name: 'Lara' })
+  
+  .then({ score: 100 });
 ```
 
 ```sql
@@ -65,21 +94,24 @@ DELETE FROM players WHERE score = 100
 
 ```js
 Player
+
+  // WHERE score = 100
   .filter({ score: 100 })
+  
+  // DELETE
   .remove();
-```
+  
+// Short cut
 
-`narwal` comes with stream and transform support:
+Player.remove({ score: 100 });
 
-```js
+// With then, invoke false to mean removal
 
-// SELECT all rows from players, save them to a file and insert them into another table
-
-new narwal.Model('Player', { name: String, score: Number })
-  .stream()
-  .format('sql')
-  .pipe(fs.createWriteFile('players.sql'))
-  .pipe(new narwal.Model('Player', { name: String, score: Number }).connect('mysql://...'))
+Player
+  
+  .where({ score: 100 })
+  
+  .then(false)
 ```
 
 # Model
