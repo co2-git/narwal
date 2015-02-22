@@ -47,8 +47,9 @@ Player // SELECT
   // select only name column
   .select('name')
   
+  // Do something with the results
   .forEach(function (player) {
-    // ...
+    console.log(player);
   });
 ```
 
@@ -59,9 +60,13 @@ INSERT INTO players (name) VALUES('Lara')
 ```js
 Player
 
+  // INSERT INTO players (name) VALUES('Lara')
   .push({ name: 'Lara' })
   
-  .pushed(function (player) {});
+  // Do something with results
+  .pushed(function (player) {
+    console.log('New player created', player);
+  });
 ```
 
 ```sql
@@ -71,47 +76,22 @@ UPDATE players SET score=100 WHERE name='Lara'
 ```js
 Player
   
-  .filter({ name: 'Lara' })
+  .update({ name: 'Lara' }, { score: 100 })
   
-  .update({ score: 100 });
-  
-// Update can be used only
-
-Player.update({ name: 'Lara' }, { score: 100 });
-  
-// Then can be invoked as well
-
-Player
-  
-  .where({ name: 'Lara' })
-  
-  .then({ score: 100 });
+  .updated(function (players) {
+    console.log
 ```
 
 ```sql
-DELETE FROM players WHERE score = 100
+DELETE FROM players WHERE score > 100
 ```
 
 ```js
 Player
-
-  // WHERE score = 100
-  .filter({ score: 100 })
+  // DELETE FROM players WHERE score = 100
+  .remove({ score: 100 })
   
-  // DELETE
-  .remove();
-  
-// Short cut
-
-Player.remove({ score: 100 });
-
-// With then, invoke false to mean removal
-
-Player
-  
-  .where({ score: 100 })
-  
-  .then(false)
+  .removed(function () {});
 ```
 
 # Model
