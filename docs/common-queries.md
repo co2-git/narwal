@@ -9,8 +9,6 @@ By default, a find query will select all the fields declared in the Model struct
 
 <big style="background: black; color: #fff; font-weight: bold; font-family: 'Courier New', Courier, sans-serif">SQL</big>
 
-```sql
-
 # CREATE
 
 ## Default fields
