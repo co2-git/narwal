@@ -143,18 +143,41 @@ new narwal.Model('Player', {
   .update({ score: 100 });
 ```
 
-## Regular update with filters
+## Regular update with regular filters
 
 ```sql
 UPDATE players SET score=100 WHERE name='Lara';
 ```
 
 ```js
-new narwal.Model('Player', {
-    name: String,
-    score: Number
-  })
-  .update({ name: 'Lara' }, { score: 100 });
+var model = new narwal.Model('Player', {
+  name: String,
+  score: Number
+});
+
+
+var query = model
+
+  .update     ({ name: 'Lara' }, { score: 100 });
+```
+
+## Regular update with advanced filters
+
+```sql
+UPDATE players SET score=100 WHERE name!='Lara';
+```
+
+```js
+var model = new narwal.Model('Player', {
+  name: String,
+  score: Number
+});
+  
+var query = model
+
+  .not          ({ name: 'Lara' })
+
+  .update       ({ score: 100 });
 ```
 
 ## Increment
@@ -185,35 +208,9 @@ new narwal.Model('Player', {
   .decrement({ score: 100 });
 ```
 
-## Multiply
-
-```sql
-UPDATE players SET score=(score * 100);
-```
-
-```js
-new narwal.Model('Player', {
-    name: String,
-    score: Number
-  })
-  .multiply({ score: 100 });
-```
-
-## Divide
-
-```sql
-UPDATE players SET score=(score / 100);
-```
-
-```js
-new narwal.Model('Player', {
-    name: String,
-    score: Number
-  })
-  .divide({ score: 100 });
-```
-
 ## Advanced update
+
+Use the `updateFunction` method to manually enter a complex setter:
 
 ```sql
 UPDATE players SET score=(score * 100 + 10);
@@ -227,10 +224,10 @@ new narwal.Model('Player', {
   .updateFunction({ score: '(score * 100 + 10)' });
 ```
 
-## Advanced update with string manipulation
+## Advanced update with string manipulation and fileter
 
 ```sql
-UPDATE players SET name=UPPER(name);
+UPDATE players SET name=UPPER(name) WHERE name!='Lara';
 ```
 
 ```js
