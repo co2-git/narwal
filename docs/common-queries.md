@@ -24,18 +24,19 @@ var query = model.find();
 
 ## Omit implicit fields
 
-You may not want the implicit fields to appear in your query. In this case, use `implicit` method:
+You may not want the implicit fields to appear in your query. In this case, use `unselect` method with no arguments:
 
 ```sql
 SELECT name, score FROM players;
 ```
 
 ```js
-new narwal.Model('Player', {
-    name: String,
-    score: Number
-  })
-  .implicit(false);
+var model = new narwal.Model('Player', {
+  name: String,
+  score: Number
+});
+
+var query = model.unselect();
 ```
 
 ## Specify fields to select
@@ -65,7 +66,7 @@ new narwal.Model('Player', {
     name: String,
     score: Number
   })
-  .implicit(false)
+  .unselect()
   .select('name');
 ```
 
@@ -219,10 +220,8 @@ new narwal.Model('Player', {
   .update({ score: { $set: '(score * 100 + 10)' } });
 ```
 
-## Advanced update with string manipulation and fileter
-
 ```sql
-UPDATE players SET name=UPPER(name) WHERE name!='Lara';
+UPDATE players SET name=UPPER(name);
 ```
 
 ```js
