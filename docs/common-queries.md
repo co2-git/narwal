@@ -112,6 +112,106 @@ new narwal.Model('Player', {
   ]);
 ```
 
+# UPDATE
+
+## Regular update
+
+```sql
+UPDATE players SET score=100 WHERE name='Lara';
+```
+
+```js
+new narwal.Model('Player', {
+    name: String,
+    score: Number
+  })
+  .update({ name: 'Lara' }, { score: 100 });
+```
+
+## Increment
+
+```sql
+UPDATE players SET score=(score + 100) WHERE name='Lara';
+```
+
+```js
+new narwal.Model('Player', {
+    name: String,
+    score: Number
+  })
+  .inc({ name: 'Lara' }, { score: 100 });
+```
+
+## Decrement
+
+```sql
+UPDATE players SET score=(score - 100) WHERE name='Lara';
+```
+
+```js
+new narwal.Model('Player', {
+    name: String,
+    score: Number
+  })
+  .dec({ name: 'Lara' }, { score: 100 });
+```
+
+## Multiply
+
+```sql
+UPDATE players SET score=(score * 100) WHERE name='Lara';
+```
+
+```js
+new narwal.Model('Player', {
+    name: String,
+    score: Number
+  })
+  .multiply({ name: 'Lara' }, { score: 100 });
+```
+
+## Divide
+
+```sql
+UPDATE players SET score=(score / 100) WHERE name='Lara';
+```
+
+```js
+new narwal.Model('Player', {
+    name: String,
+    score: Number
+  })
+  .divide({ name: 'Lara' }, { score: 100 });
+```
+
+## Advanced update with basic math
+
+```sql
+UPDATE players SET score=(score * 100 + id) WHERE name='Lara';
+```
+
+```js
+new narwal.Model('Player', {
+    name: String,
+    score: Number
+  })
+  .update({ name: 'Lara' }, { score: new narwal.Apply('(score * 100 + id)') });
+```
+
+## Advanced update with string manipulation
+
+```sql
+UPDATE players SET name=UPPER(name) WHERE name='Lara';
+```
+
+```js
+new narwal.Model('Player', {
+    name: String,
+    score: Number
+  })
+  .update({ name: 'Lara' }, { name: new narwal.Apply('UPPER(name)') });
+```
+
 # CREATE
 
 ## Default fields
