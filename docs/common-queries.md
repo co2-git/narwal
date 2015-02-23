@@ -53,6 +53,65 @@ new narwal.Model('Player', {
   .select('name');
 ```
 
+# SELECT AS
+
+By default, `narwal` uses the field name as declared in the structure. You could use aliases by picking the alias name as the field name, and specify real field name in the `field` property:
+
+```sql
+SELECT some_long_legacy_name AS name FROM players;
+```
+
+```js
+new narwal.Model('Player', {
+  'name': {
+    'type': String,
+    'field:' 'some_long_legacy_name'
+}).find();
+```
+
+# INSERT
+
+## Insert single row
+
+```sql
+INSERT INTO players (name, score) VALUES ('Lara', 100);
+```
+
+```js
+new narwal.Model('Player', {
+    name: String,
+    score: Number
+  })
+  .insert({
+    name: 'Lara',
+    score: 100
+  });
+```
+
+## Insert several rows
+
+```sql
+INSERT INTO players (name, score) VALUES ('Lara', 100), ('Chiyoko', 100);
+```
+
+```js
+new narwal.Model('Player', {
+    name: String,
+    score: Number
+  })
+  .insert([
+    {
+      name: 'Lara',
+      score: 100
+    },
+    
+    {
+      name: 'Chiyoko',
+      score: 100
+    }
+  ]);
+```
+
 # CREATE
 
 ## Default fields
@@ -85,4 +144,20 @@ CREATE TABLE players (
 
 ```js
 new narwal.Model('Player', {}, { id: 'player_id' });
+```
+
+## No `id` field
+
+If your table does not need an id, use `{ id: false }`.
+
+```sql
+CREATE TABLE players (
+  player_id   INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+  created     TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00', 
+  updated     TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW()
+);
+```
+
+```js
+new narwal.Model('Player', {}, { id: false });
 ```
