@@ -3,6 +3,14 @@ Common queries
 
 Here you can find a list of common MySQL queries along with their Narwal query equivalent.
 
+# SELECT columns
+
+By default, a find query will select all the fields declared in the Model structure.
+
+<big style="background: black; color: #fff; font-weight: bold; font-family: 'Courier New', Courier, sans-serif">SQL</big>
+
+```sql
+
 # CREATE
 
 ## Default fields
@@ -14,6 +22,8 @@ CREATE TABLE players (
   updated     TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW()
 );
 ```
+
+<big style="background: black; color: #fff; font-weight: bold; font-family: 'Courier New', Courier, sans-serif">JS</big>
 
 ```js
 new narwal.Model('Player', {}).create();
