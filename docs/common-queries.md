@@ -23,7 +23,7 @@ new narwal.Model('Player', {
 
 ## Omit default fields
 
-You may not want the default fields to appear in your query. In this case, use `select` method:
+You may not want the default fields to appear in your query. In this case, use `unselect` method:
 
 ```sql
 SELECT name, score FROM players;
@@ -34,12 +34,12 @@ new narwal.Model('Player', {
     name: String,
     score: Number
   })
-  .select({ id: false, created: false, updated: false });
+  .unselect('id', 'created', 'updated');
 ```
 
 ## Specify fields to select
 
-You may not want to select all the fields from your Model's structure. Use `select` to specify which
+You may not want to select all the fields from your Model's structure. Use `select` to specify which.
 
 ```sql
 SELECT name FROM players;
