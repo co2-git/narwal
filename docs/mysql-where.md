@@ -88,3 +88,19 @@ var is = narwal.is;
 
 var query = Player.filter({ score: is.below(100) });
 ```
+
+# JOIN
+
+```sql
+SELECT * FROM players JOIN teams ON players.team = teams.id WHERE teams.name='Red';
+```
+
+```js
+var is = narwal.is;
+
+var model = new narwal.Model('Player', {
+  team: new narwal.Model('Team', { name: String })
+});
+
+var query = Player.filter({ team: { name: 'Red' } });
+```
