@@ -21,9 +21,9 @@ new narwal.Model('Player', {
   .find();
 ```
 
-## Omit default fields
+## Omit implicit fields
 
-You may not want the default fields to appear in your query. In this case, use `unselect` method:
+You may not want the implicit fields to appear in your query. In this case, use `implicit` method:
 
 ```sql
 SELECT name, score FROM players;
@@ -34,12 +34,26 @@ new narwal.Model('Player', {
     name: String,
     score: Number
   })
-  .unselect('id', 'created', 'updated');
+  .implicit(false);
 ```
 
 ## Specify fields to select
 
 You may not want to select all the fields from your Model's structure. Use `select` to specify which.
+
+```sql
+SELECT id, name, created, updated FROM players;
+```
+
+```js
+new narwal.Model('Player', {
+    name: String,
+    score: Number
+  })
+  .select('name');
+```
+
+## Specify fields to select without implicit fields
 
 ```sql
 SELECT name FROM players;
@@ -50,6 +64,7 @@ new narwal.Model('Player', {
     name: String,
     score: Number
   })
+  .implicit(false)
   .select('name');
 ```
 
