@@ -1,5 +1,5 @@
 Common queries
-##############
+==============
 
 Here you can find a list of common MySQL queries along with their Narwal query equivalent.
 
