@@ -205,7 +205,7 @@ new narwal.Model('Player', {
 
 ## Advanced update
 
-Use the `updateFunction` method to manually enter a complex setter:
+Use the `$set` property to manually enter a complex setter:
 
 ```sql
 UPDATE players SET score=(score * 100 + 10);
@@ -216,7 +216,7 @@ new narwal.Model('Player', {
     name: String,
     score: Number
   })
-  .updateFunction({ score: '(score * 100 + 10)' });
+  .update({ score: { $set: '(score * 100 + 10)' } });
 ```
 
 ## Advanced update with string manipulation and fileter
@@ -226,11 +226,12 @@ UPDATE players SET name=UPPER(name) WHERE name!='Lara';
 ```
 
 ```js
-new narwal.Model('Player', {
-    name: String,
-    score: Number
-  })
-  .updateFunction({ name: 'UPPER(name)' });
+var model = new narwal.Model('Player', {
+  name: String,
+  score: Number
+});
+
+var query = model.update({ name: { $set: 'UPPER(name)' } });
 ```
 
 # CREATE
