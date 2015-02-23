@@ -103,5 +103,5 @@ var model = new narwal.Model('Player', {
   team: new narwal.Model('Team', { name: String })
 });
 
-var query = Player.filter({ team: { name: is.not('Red'), score: is.above(1000) } });
+var query = Player.filter({ team: { name: is.not('Red') }, score: is.above(1000) });
 ```
