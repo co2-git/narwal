@@ -14,11 +14,12 @@ SELECT id, name, score, created, updated FROM players;
 ```
 
 ```js
-new narwal.Model('Player', {
-    name: String,
-    score: Number
-  })
-  .find();
+var model = new narwal.Model('Player', {
+  name: String,
+  score: Number
+});
+
+var query = model.find();
 ```
 
 ## Omit implicit fields
@@ -156,9 +157,7 @@ var model = new narwal.Model('Player', {
 });
 
 
-var query = model
-
-  .update     ({ name: 'Lara' }, { score: 100 });
+var query = model.update({ name: 'Lara' }, { score: 100 });
 ```
 
 ## Regular update with advanced filters
@@ -173,11 +172,7 @@ var model = new narwal.Model('Player', {
   score: Number
 });
   
-var query = model
-
-  .not          ({ name: 'Lara' })
-
-  .update       ({ score: 100 });
+var query = model.not({ name: 'Lara' }).update({ score: 100 });
 ```
 
 ## Increment
