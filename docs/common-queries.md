@@ -5,9 +5,53 @@ Here you can find a list of common MySQL queries along with their Narwal query e
 
 # SELECT columns
 
-By default, a find query will select all the fields declared in the Model structure.
+## Default fields
 
-<big style="background: black; color: #fff; font-weight: bold; font-family: 'Courier New', Courier, sans-serif">SQL</big>
+By default, a find query will select all the fields declared in the Model structure plus the implicit fields `id`, `created` and `updated`.
+
+```sql
+SELECT id, name, score, created, updated FROM players;
+```
+
+```js
+new narwal.Model('Player', {
+    name: String,
+    score: Number
+  })
+  .find();
+```
+
+## Omit default fields
+
+You may not want the default fields to appear in your query. In this case, use `select` method:
+
+```sql
+SELECT name, score FROM players;
+```
+
+```js
+new narwal.Model('Player', {
+    name: String,
+    score: Number
+  })
+  .select({ id: false, created: false, updated: false });
+```
+
+## Specify fields to select
+
+You may not want to select all the fields from your Model's structure. Use `select` to specify which
+
+```sql
+SELECT name FROM players;
+```
+
+```js
+new narwal.Model('Player', {
+    name: String,
+    score: Number
+  })
+  .select('name');
+```
 
 # CREATE
 
@@ -20,8 +64,6 @@ CREATE TABLE players (
   updated     TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW()
 );
 ```
-
-<big style="background: black; color: #fff; font-weight: bold; font-family: 'Courier New', Courier, sans-serif">JS</big>
 
 ```js
 new narwal.Model('Player', {}).create();
