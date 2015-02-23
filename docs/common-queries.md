@@ -117,6 +117,20 @@ new narwal.Model('Player', {
 ## Regular update
 
 ```sql
+UPDATE players SET score=100;
+```
+
+```js
+new narwal.Model('Player', {
+    name: String,
+    score: Number
+  })
+  .update({ score: 100 });
+```
+
+## Regular update with filters
+
+```sql
 UPDATE players SET score=100 WHERE name='Lara';
 ```
 
@@ -131,7 +145,7 @@ new narwal.Model('Player', {
 ## Increment
 
 ```sql
-UPDATE players SET score=(score + 100) WHERE name='Lara';
+UPDATE players SET score=(score + 100);
 ```
 
 ```js
@@ -139,13 +153,13 @@ new narwal.Model('Player', {
     name: String,
     score: Number
   })
-  .inc({ name: 'Lara' }, { score: 100 });
+  .increment({ score: 100 });
 ```
 
 ## Decrement
 
 ```sql
-UPDATE players SET score=(score - 100) WHERE name='Lara';
+UPDATE players SET score=(score - 100);
 ```
 
 ```js
@@ -153,13 +167,13 @@ new narwal.Model('Player', {
     name: String,
     score: Number
   })
-  .dec({ name: 'Lara' }, { score: 100 });
+  .decrement({ score: 100 });
 ```
 
 ## Multiply
 
 ```sql
-UPDATE players SET score=(score * 100) WHERE name='Lara';
+UPDATE players SET score=(score * 100);
 ```
 
 ```js
@@ -167,13 +181,13 @@ new narwal.Model('Player', {
     name: String,
     score: Number
   })
-  .multiply({ name: 'Lara' }, { score: 100 });
+  .multiply({ score: 100 });
 ```
 
 ## Divide
 
 ```sql
-UPDATE players SET score=(score / 100) WHERE name='Lara';
+UPDATE players SET score=(score / 100);
 ```
 
 ```js
@@ -181,13 +195,13 @@ new narwal.Model('Player', {
     name: String,
     score: Number
   })
-  .divide({ name: 'Lara' }, { score: 100 });
+  .divide({ score: 100 });
 ```
 
-## Advanced update with basic math
+## Advanced update
 
 ```sql
-UPDATE players SET score=(score * 100 + id) WHERE name='Lara';
+UPDATE players SET score=(score * 100 + 10);
 ```
 
 ```js
@@ -195,13 +209,13 @@ new narwal.Model('Player', {
     name: String,
     score: Number
   })
-  .update({ name: 'Lara' }, { score: new narwal.Apply('(score * 100 + id)') });
+  .updateFunction({ score: '(score * 100 + 10)' });
 ```
 
 ## Advanced update with string manipulation
 
 ```sql
-UPDATE players SET name=UPPER(name) WHERE name='Lara';
+UPDATE players SET name=UPPER(name);
 ```
 
 ```js
@@ -209,7 +223,7 @@ new narwal.Model('Player', {
     name: String,
     score: Number
   })
-  .update({ name: 'Lara' }, { name: new narwal.Apply('UPPER(name)') });
+  .updateFunction({ name: 'UPPER(name)' });
 ```
 
 # CREATE
