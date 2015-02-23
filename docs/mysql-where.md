@@ -92,15 +92,16 @@ var query = Player.filter({ score: is.below(100) });
 # JOIN
 
 ```sql
-SELECT * FROM players JOIN teams ON players.team = teams.id WHERE teams.name='Red';
+SELECT * FROM players JOIN teams ON players.team = teams.id WHERE teams.name!='Red' AND players.score>1000;
 ```
 
 ```js
 var is = narwal.is;
 
 var model = new narwal.Model('Player', {
+  score: Number,
   team: new narwal.Model('Team', { name: String })
 });
 
-var query = Player.filter({ team: { name: 'Red' } });
+var query = Player.filter({ team: { name: is.not('Red'), score: is.above(1000) } });
 ```
