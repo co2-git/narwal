@@ -2,6 +2,8 @@
   
   'use strict';
 
-  module.exports = require('./lib/Narwal');
+  exports.Client = require('./lib/Client');
+  exports.Model = require('./lib/Model');
+  exports.is = require('./lib/Is');
 
 } ();
