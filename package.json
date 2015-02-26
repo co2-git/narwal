@@ -1,19 +1,35 @@
 {
   "name": "narwal",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.0.2",
+  "description": "Data-Structure loosely coupled architecture for MySQL with NodeJS",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "directories": {
+    "doc": "docs",
+    "test": "test"
   },
-  "author": "",
-  "license": "BSD-2-Clause",
   "dependencies": {
-    "mysql": "~2.5.4"
+    "colors": "^1.0.3",
+    "mysql": "^2.5.4",
+    "should": "^4.6.5"
   },
   "devDependencies": {
-    "colors": "~1.0.3",
-    "should": "~4.6.5",
-    "mocha": "~2.1.0"
-  }
+    "mocha": "^2.1.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/immobileaks/narwal.git"
+  },
+  "keywords": [
+    "mysql",
+    "model"
+  ],
+  "author": "dev@immobileaks.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/immobileaks/narwal/issues"
+  },
+  "homepage": "https://github.com/immobileaks/narwal"
 }
