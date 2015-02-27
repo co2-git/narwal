@@ -73,7 +73,7 @@ var fields = Player.fields;
 
 Player
   
-  .addFilter({ "full_name": sql.concat(fields.first_name, ' ', fields.last_name) })
+  .addFilter('full_name', sql.concat(fields.first_name, ' ', fields.last_name))
   
   .find({ "full_name": is.not.sql.lower('John Doe') });
 ```
