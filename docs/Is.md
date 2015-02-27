@@ -50,7 +50,7 @@ Heck! These ones too:
 ```sql
 SELECT score, points FROM players WHERE score = (points / 2);
 
-SELECT * FROM players WHERE CONCAT(first_name, ' ', last_name) = LOWER('John Doe');
+SELECT * FROM players WHERE CONCAT(first_name, ' ', last_name) != LOWER('John Doe');
 ```
 
 This is where `is` comes in to offer you more grain control:
@@ -75,7 +75,7 @@ Player
   
   .addFilter({ "full_name": sql.concat(fields.first_name, ' ', fields.last_name) })
   
-  .find({ "full_name": is.sql.lower('John Doe') });
+  .find({ "full_name": is.not.sql.lower('John Doe') });
 ```
 
 # `is`
