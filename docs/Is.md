@@ -50,7 +50,7 @@ Heck! These ones too:
 ```sql
 SELECT score, points FROM players WHERE score = (points / 2);
 
-SELECT * FROM players WHERE CONCAT(first_name, last_name) = LOWER('John Doe');
+SELECT * FROM players WHERE CONCAT(first_name, ' ', last_name) = LOWER('John Doe');
 ```
 
 This is where `is` comes in to offer you more grain control:
@@ -68,11 +68,13 @@ Player.find({ "name": is.field("avatar") });
 
 Player.find({ "score": is.sql('(?? / 2)', 'points') });
 
+var sql = narwal.sql;
+
 Player
   
-  .virtual({ "full_name": map.concat('first_name', 'last_name') })
+  .addFilter({ "full_name": sql.concat(Player.fields.first_name, ' ', Players.fields.last_name) })
   
-  .find({ "full_name": is.sql('LOWER(?)', 'John Die') });
+  .find({ "full_name": is.sql.lower('John Doe') });
 ```
 
 # `is`
