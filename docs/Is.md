@@ -16,7 +16,7 @@ SELECT name FROM players WHERE name = 'Lara':
 #### Narwal
 
 ```js
-new narwal.Model('Player', 'name').filter({ name: 'Lara' });
+Player.find({ name: 'Lara' });
 ```
 
 Now, let's say you want to perform this query:
