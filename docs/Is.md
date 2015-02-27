@@ -5,7 +5,7 @@ n a r w a l . I s
 
 `Is` comes handy everytime you have to handle a query too complex for an object notation.
 
-This is a simple query that can be handled by a simple object:
+This is a simple query that can be handled by an object notation:
 
 ##### MySQL
 
