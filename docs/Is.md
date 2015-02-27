@@ -7,13 +7,13 @@ n a r w a l . I s
 
 This is a simple query that can be handled by a simple object:
 
-#### MySQL
+##### MySQL
 
 ```sql
 SELECT name FROM players WHERE name = 'Lara':
 ```
 
-#### Narwal
+##### Narwal
 
 ```js
 Player.find({ name: 'Lara' });
@@ -21,11 +21,15 @@ Player.find({ name: 'Lara' });
 
 Now, let's say you want to perform this query:
 
+##### MySQL
+
 ```sql
 SELECT name FROM players WHERE name != 'Lara':
 ```
 
 Or this one:
+
+##### MySQL
 
 ```sql
 SELECT score FROM players WHERE score > 100:
@@ -33,11 +37,15 @@ SELECT score FROM players WHERE score > 100:
 
 Or even this one:
 
+##### MySQL
+
 ```sql
 SELECT name, avatar FROM players WHERE name = avatar:
 ```
 
 Heck! These ones too:
+
+##### MySQL
 
 ```sql
 SELECT score, points FROM players WHERE score = (points / 2);
