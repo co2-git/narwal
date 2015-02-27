@@ -69,10 +69,11 @@ Player.find({ "name": is.field("avatar") });
 Player.find({ "score": is.sql('(?? / 2)', 'points') });
 
 var sql = narwal.sql;
+var fields = Player.fields;
 
 Player
   
-  .addFilter({ "full_name": sql.concat(Player.fields.first_name, ' ', Players.fields.last_name) })
+  .addFilter({ "full_name": sql.concat(fields.first_name, ' ', fields.last_name) })
   
   .find({ "full_name": is.sql.lower('John Doe') });
 ```
