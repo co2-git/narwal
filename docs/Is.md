@@ -55,6 +55,8 @@ SELECT * FROM players WHERE CONCAT(first_name, last_name) = LOWER('John Doe');
 
 This is where `is` comes in to offer you more grain control:
 
+##### Narwal
+
 ```js
 var is = narwal.is;
 
