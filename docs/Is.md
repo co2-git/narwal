@@ -1,26 +1,74 @@
 n a r w a l . I s
 =================
 
-# `is(Mixed)`
+# `is`
 
-```js
-Player.filter({ score: is(100) });
+```sql
+SELECT name FROM players WHERE score = 100;
 ```
 
-# `is.not(String)`
-
 ```js
-Player.filter({ score: is.not(100) });
+new narwal.Model('Player', { name: String, score: Number })
+
+  .filter({ score: is(100) });
 ```
 
-# `is.above(String)`
+# `not`
 
-```js
-Player.filter({ score: is.above(100) });
+```sql
+SELECT name FROM players WHERE score != 100;
 ```
 
-# `is.below(String)`
+```js
+new narwal.Model('Player', { name: String, score: Number })
+
+  .filter({ score: is.not(100) });
+```
+
+# `above`
+
+```sql
+SELECT name FROM players WHERE score  > 100;
+```
 
 ```js
-Player.filter({ score: is.below(100) });
+new narwal.Model('Player', { name: String, score: Number })
+
+  .filter({ score: is.above(100) });
+```
+
+# `somehow above`
+
+```sql
+SELECT name FROM players WHERE score  >= 100;
+```
+
+```js
+new narwal.Model('Player', { name: String, score: Number })
+
+  .filter({ score: [is(100), is.above(100)] });
+```
+
+# `below`
+
+```sql
+SELECT name FROM players WHERE score  < 100;
+```
+
+```js
+new narwal.Model('Player', { name: String, score: Number })
+
+  .filter({ score: is.below(100) });
+```
+
+# `somehow below`
+
+```sql
+SELECT name FROM players WHERE score <= 100;
+```
+
+```js
+new narwal.Model('Player', { name: String, score: Number })
+
+  .filter({ score: [is(100), is.below(100)] });
 ```
