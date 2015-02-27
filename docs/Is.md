@@ -70,7 +70,7 @@ Player.find({ "score": is.sql('(?? / 2)', 'points') });
 
 Player
   
-  .map({ "full_name": map.concat('first_name', 'last_name') })
+  .virtual({ "full_name": map.concat('first_name', 'last_name') })
   
   .find({ "full_name": is.sql('LOWER(?)', 'John Die') });
 ```
