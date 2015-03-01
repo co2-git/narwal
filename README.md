@@ -11,10 +11,42 @@ n    a    r    w    a    l
 npm install narwal
 ```
 
-# Use
-
 ```js
 var narwal = require('narwal');
+```
+
+# Structure abstraction
+
+With `narwal` it's easy to modelize your data structure:
+
+```js
+new narwal.Model('Employee', {
+  first_name: {
+    type: String,
+    required: true
+  },
+  
+  last_name: {
+    type: String,
+    required: true
+  },
+  
+  email: {
+    type: String,
+    required: true,
+    validate: /^.+@.+$/
+  },
+  
+  dob: {
+    type: Date,
+    required: true
+  },
+  
+  score: {
+    type: Number,
+    default: 0
+  }
+});
 ```
 
 # Overview
