@@ -84,8 +84,8 @@ UPDATE employees SET first_name='John' WHERE last_name='Doe'
 
 ```js
 narwal.models.Employee
-  .update({ first_name: 'John' })
-  .where({ last_name: 'Doe' });
+  .update({ "first_name": 'John' })
+  .where({ "last_name": 'Doe' });
 ```
 
 ## DELETE
@@ -96,30 +96,22 @@ DELETE FROM employees WHERE first_name='John' AND last_name='Doe'
 
 ```js
 narwal.models.Employee
-  .remove({ first_name: 'John', last_name: 'Doe' });
+  .remove({ "first_name": 'John', "last_name": 'Doe' });
 ```
 
 # JOIN
 
-You can specify JOIN tables in your models:
-
-```sql
-SELECT p.username, p.score, t.id, t.name 
-    FROM players AS p
-    JOIN teams AS t ON p.team = t.id
-    WHERE t.name = 'red'
-```
+You can join models
 
 ```js
 new narwal.Model('Player', {
   username:   String,
   score:      Number,
-  team:       new narwal.Model('Team', { name: String })
+  team:       new narwal.Model('Team', { name: String, color: String })
 });
 
 narwal.models.Player
-  .find({ "team": { "name": "red" } })
-  .join("team");
+  .find({ "team": { "color": "red" } });
 ```
 
 # Hooks
