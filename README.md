@@ -129,3 +129,11 @@ narwal.models.Player.after('remove', function (row, done) {
 ```
 
 # Transactions
+
+# Stream support
+
+# Pipe
+
+```js
+Player1.find().stream().pipe(Player2);
+```
