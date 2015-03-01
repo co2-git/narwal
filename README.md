@@ -49,14 +49,26 @@ new narwal.Model('Employee', {
 
 # CRUD Queries
 
-`narwal` models can easily be queried for `SELECT`, `INSERT`, `UPDATE` and `DELETE` queries
+`narwal` models can easily be queried for `SELECT`, `INSERT`, `UPDATE` and `DELETE` queries.
+
+## INSERT INTO
+
+```sql
+INSERT INTO employees (first_name, last_name) VALUES ('John', 'Doe')
+```
 
 ```js
-// INSERT INTO employees (first_name, last_name) VALUES ('John', 'Doe')
 narwal.models.Employee
   .insert({ "first_name": 'John', "last_name": 'Doe' });
+```
 
-// SELECT email FROM employees WHERE first_name='John' AND last_name='Doe' LIMIT 10 ORDER BY email ASC
+## SELECT
+
+```sql
+SELECT email FROM employees WHERE first_name='John' AND last_name='Doe' LIMIT 10 ORDER BY email ASC
+```
+
+```js
 narwal.models.Employee
   .find({ "first_name": 'John', "last_name": 'Doe' })
   .select("email")
