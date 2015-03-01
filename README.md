@@ -122,16 +122,18 @@ narwal.models.Player
   .join("team");
 ```
 
-# HOOKS
+# Hooks
 
 You can also `before` and `after` hooks on any operations:
 
 ```js
-new narwal.Model('Player', { score: Number, team: String });
-
-narwal.models.Player.before('insert', function (row) {
-  if ( row.team === 'red' ) {
-    row.score = 100;
-  }
+narwal.models.Player.before('insert', function (row, done) {
+  fs.mkdir('users/' + row.id, done);
 });
+
+narwal.models.Player.after('remove', function (row, done) {
+  fs.rmdir('users/' + row.id, done);
+}
 ```
+
+# Transactions
