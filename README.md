@@ -74,13 +74,27 @@ narwal.models.Employee
   .select("email")
   .limit(10)
   .sort("email");
+```
 
-// UPDATE employees SET first_name='John' WHERE last_name='Doe'
+## UPDATE
+
+```sql
+UPDATE employees SET first_name='John' WHERE last_name='Doe'
+```
+
+```js
 narwal.models.Employee
   .update({ first_name: 'John' })
   .where({ last_name: 'Doe' });
+```
 
-// DELET FROM employees WHERE first_name='John' AND last_name='Doe'
+## DELETE
+
+```sql
+DELETE FROM employees WHERE first_name='John' AND last_name='Doe'
+```
+
+```js
 narwal.models.Employee
   .remove({ first_name: 'John', last_name: 'Doe' });
 ```
