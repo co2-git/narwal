@@ -21,26 +21,26 @@ With `narwal` it's easy to modelize your data structure:
 
 ```js
 new narwal.Model('Employee', {
-  first_name: {
+  "first_name": {
     type: String,
     required: true
   },
   
-  last_name: {
+  "last_name": {
     type: String,
     required: true
   },
   
-  email: {
+  "email": {
     type: String
     validate: /^.+@.+$/
   },
   
-  dob: {
+  "dob": {
     type: Date
   },
   
-  active: {
+  "active": {
     type: Boolean,
     default: false
   }
@@ -52,13 +52,25 @@ new narwal.Model('Employee', {
 `narwal` models can easily be queried for `SELECT`, `INSERT`, `UPDATE` and `DELETE` queries
 
 ```js
-narwal.models.Employee.insert({ first_name: 'John', last_name: 'Doe' });
+// INSERT INTO employees (first_name, last_name) VALUES ('John', 'Doe')
+narwal.models.Employee
+  .insert({ "first_name": 'John', "last_name": 'Doe' });
 
-narwal.models.Employee.find({ first_name: 'John', last_name: 'Doe' });
+// SELECT email FROM employees WHERE first_name='John' AND last_name='Doe' LIMIT 10 ORDER BY email ASC
+narwal.models.Employee
+  .find({ "first_name": 'John', "last_name": 'Doe' })
+  .select("email")
+  .limit(10)
+  .sort("email");
 
-narwal.models.Employee.update({ last_name: 'Doe' }, { first_name: 'John' });
+// UPDATE employees SET first_name='John' WHERE last_name='Doe'
+narwal.models.Employee
+  .update({ first_name: 'John' })
+  .where({ last_name: 'Doe' });
 
-narwal.models.Employee.remove({ first_name: 'John', last_name: 'Doe' });
+// DELET FROM employees WHERE first_name='John' AND last_name='Doe'
+narwal.models.Employee
+  .remove({ first_name: 'John', last_name: 'Doe' });
 ```
 
 # JOIN
