@@ -32,21 +32,56 @@ new narwal.Model('Employee', {
   },
   
   email: {
-    type: String,
-    required: true,
+    type: String
     validate: /^.+@.+$/
   },
   
   dob: {
-    type: Date,
-    required: true
+    type: Date
   },
   
-  score: {
-    type: Number,
-    default: 0
+  active: {
+    type: Boolean,
+    default: false
   }
 });
+```
+
+# CRUD Queries
+
+`narwal` models can easily be queried for `SELECT`, `INSERT`, `UPDATE` and `DELETE` queries
+
+```js
+narwal.models.Employee.insert({ first_name: 'John', last_name: 'Doe' });
+
+narwal.models.Employee.find({ first_name: 'John', last_name: 'Doe' });
+
+narwal.models.Employee.update({ last_name: 'Doe' }, { first_name: 'John' });
+
+narwal.models.Employee.remove({ first_name: 'John', last_name: 'Doe' });
+```
+
+# JOIN
+
+You can specify JOIN tables in your models:
+
+```sql
+SELECT p.username, p.score, t.id, t.name 
+    FROM players AS p
+    JOIN teams AS t ON p.team = t.id
+    WHERE t.name = 'red'
+```
+
+```js
+new narwal.Model('Player', {
+  username:   String,
+  score:      Number,
+  team:       new narwal.Model('Team', { name: String })
+});
+
+narwal.models.Player
+  .find({ "team": { "name": "red" } })
+  .join("team");
 ```
 
 # Overview
