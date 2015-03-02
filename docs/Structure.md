@@ -19,11 +19,12 @@ new narwal.Model('My Model', structure);
 
 | Property | Type | Description | Example | Default |
 |----------|------|-------------|---------|---------|
-| `type` | `Mixed` | The field's data type | `{ type: String }` | `String` |
+| [`type`](#type) | `Mixed` | The field's data type | `{ type: String }` | `String` |
 | `required` | `Boolean` | Whether or not this field is required on `insert` queries | `{ required: true }` | `false` |
-| `validate` | `Mixed` | A validator that must be complied with on `insert` and `update` queries | `{ validate: "10..15" }` |
+| `validate` | `Mixed` | A validator that must be complied with on `insert` and `update` queries | `{ validate: "10..15" }` | `undefined` |
+|
 
-# Type
+# <a name="type"></a>Type
 
 ## Native type
 
