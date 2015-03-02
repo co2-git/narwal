@@ -137,10 +137,12 @@ var sql = narwal.sql;
 narwal.models.Player
   
   .filter({
-    "first_name":     is.not("John"),
-    "last_name":      [ "Jackson", /^Smith/ ],
-    "score":          is.above(100),
-    "dob":            is.after(sql('NOW()'))
+  
+    "first_name":               is.not("John"),
+    "last_name":                [ "Jackson", /^Smith/ ],
+    "score":                    is.above(100),
+    "trial_expiration_date":    is.after(sql('NOW()'))
+  
   });
 ```
 
