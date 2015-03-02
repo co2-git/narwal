@@ -19,7 +19,7 @@ new narwal.Model('My Model', structure);
 
 | Property | Type | Description | Example | Default |
 |----------|------|-------------|---------|---------|
-| [`type`](#type) | `Mixed` | The field's data type | `{ type: String }` | `String` |
+| [`type`](#type) | `Mixed` | The field's data type | { "type": `String` } | `String` |
 | `required` | `Boolean` | Whether or not this field is required on `insert` queries | `{ required: true }` | `false` |
 | `validate` | `Mixed` | A validator that must be complied with on `insert` and `update` queries | `{ validate: "10..15" }` | `undefined` |
 |
@@ -32,83 +32,32 @@ We match some JavaScript native types with some MySQL types:
 
 | JavaScript types | MySQL types |
 |------------------|-------------|
-| { type: String } | VARCHAR(255) |
-| { type: Number } | INT(11) |
-| { type: Date } | TIMESTAMP |
-| { type: Boolean } | TINYINT(1) |
-| { type: Buffer } | BINARY |
+| `String` | VARCHAR(255) |
+| `Number` } | INT(11) |
+| `Date` } | TIMESTAMP |
+| `Boolean` } | TINYINT(1) |
+| `Buffer` } | BINARY |
 
 ```js
 new narwal.Model('Player', {
-  "name":   String,
-  "score":  Number,
-  "dob":    Date,
-  "active": Boolean
+  "name":   String,       // FIELD name VARCHAR(255)
+  "score":  Number,       // FIELD score INT(11)
+  "dob":    Date,         // FIELD dob TIMESTAMP
+  "active": Boolean       // FIELD active TINYINT(1)
 });
 ```
 
 ## Advanced types
 
-MySQL has a lot of types: you can write them directly:
+Any other MySQL types can be typed:
 
 ```js
-new narwal.Model('Player', { lat: 'DECIMAL(6,9)' });
+                            // FIELD lat DECIMAL(6,9)
+new narwal.Model('Player',  { lat: 'DECIMAL(6,9)' });
 ```
 
-## References
-
-By setting a field type to another model, the two models will be joined:
+We will soon incorporate an API that covers all MySQL data types and that will have the following syntax:
 
 ```js
-new narwal.Model('Player', { team: new narwal.Model('Team') });
-```
-
-# Default values
-
-# Validators
-
-# Required
-
-# String syntax
-
-If you want to target only one column of the table and this column is of type `varchar` you can use this shortcut syntax:
-
-```js
-new narwal.Model('Player', 'name')
-```
-
-This is the equivalent of:
-
-```js
-new narwal.Model('Player', { 'name': { type: String } });
-```
-
-# Array syntax
-
-If you want to target only columns of the table and these columns are all of type `varchar` you can use this shortcut syntax:
-
-```js
-new narwal.Model('Player', ['name', 'quote']);
-```
-
-This is the equivalent of:
-
-```js
-new narwal.Model('Player', { 'name': { type: String }, 'quote': { type: String } });
-```
-
-# Object syntax
-
-## Type syntax
-
-If you just want to define the type of the field, you can use the following syntax:
-
-```js
-new narwal.Model('Player', { name: String, score: Number });
-```
-
-This is the equivalent of:
-
-```js
-new narwal.Model('Player', { 'name': { type: String }, 'score': { type: Number } });
+new narwal.Model('Player', { lat: narwal.Types.Decimal(6, 9) }
 ```
