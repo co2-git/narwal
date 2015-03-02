@@ -90,5 +90,5 @@ new narwal.Model('Player', {
 
 narwal.models.Player.insert({});
 
-// [ NarwalError: Missing required field 'name' ]
+// [ NarwalError: Player::insert => Missing required field 'name' ]
 ```
