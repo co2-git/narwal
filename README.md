@@ -132,6 +132,7 @@ SELECT * FROM players
 
 ```js
 var is = narwal.is;
+var sql = narwal.sql;
 
 narwal.models.Player
   
@@ -139,7 +140,7 @@ narwal.models.Player
     "first_name":     is.not("John"),
     "last_name":      [ "Jackson", /^Smith/ ],
     "score":          is.above(100),
-    "dob":            is.after(is.sql('NOW()'))
+    "dob":            is.after(sql('NOW()'))
   });
 ```
 
