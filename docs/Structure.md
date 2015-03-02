@@ -19,9 +19,9 @@ new narwal.Model('My Model', structure);
 
 | Property | Type | Description | Default |
 |----------|------|-------------|---------|
-| [`type`](#type) | `Mixed` | The field's data type | { "type": `String` } | `String` |
-| [`required`](#required) | `Boolean` | Whether or not this field is required on `insert` queries | `false` |
-| [`validate`](#validate) | `Mixed` | A validator that must be complied with on `insert` and `update` queries | `undefined` |
+| [type](#type) | `Mixed` | The field's data type | `String` |
+| [required](#required) | `Boolean` | Whether or not this field is required on `insert` queries | `false` |
+| [validate](#validate) | `Mixed` | A validator that must be complied with on `insert` and `update` queries | `undefined` |
 | `default` | `Mixed` | A default value to be applied on `insert` and `update` queries | `undefined` |
 
 # <a name="type"></a>Type
