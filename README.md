@@ -114,18 +114,21 @@ narwal.models.Employee
   .remove({ "first_name": 'John', "last_name": 'Doe' });
 ```
 
-# JOIN
+# Relations
 
-You can join models
+It is easy to link different models together:
 
 ```js
-new narwal.Model('Player', {
-  username:   String,
-  score:      Number,
-  team:       new narwal.Model('Team', { name: String, color: String })
-});
+// Join model Player with model Team
+
+new narwal.Model("Team", { "color": String });
+
+new narwal.Model("Player", { "username": String, "team": narwal.models.Team });
+
+// Note that you can do deep-linking search:
 
 narwal.models.Player
+  // Find players which team's color is red
   .find({ "team": { "color": "red" } });
 ```
 
