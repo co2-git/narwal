@@ -3,21 +3,38 @@ Structure
 
 This holds the structure (fields) representation of a table. **Note that the tables must exists and their structure must match**.
 
+# Fields
+
+Structure is a list of fields which syntax is:
+
+```js
+{
+  "field_1": Field,
+  "field_2": Field,
+  ...
+}
+```
+
 # Types
 
-## Default types
+## Native type
 
-`narwal` lets you specify three basic types by matching them to JavaScript built-in objects:
+We match some JavaScript native types with some MySQL types:
 
-- `String` <=> `VARCHAR(255)`
-- `Number` <=> `INT(11)`
-- `Date` <=> `TIMESTAMP`
+| JavaScript types | MySQL types |
+|------------------|-------------|
+| { type: String } | VARCHAR(255) |
+| { type: Number } | INT(11) |
+| { type: Date } | TIMESTAMP |
+| { type: Boolean } | TINYINT(1) |
+| { type: Buffer } | BINARY |
 
 ```js
 new narwal.Model('Player', {
-  name: String,
-  score: Number,
-  joined: Date
+  "name":   String,
+  "score":  Number,
+  "dob":    Date,
+  "active": Boolean
 });
 ```
 
