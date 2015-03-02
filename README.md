@@ -162,12 +162,12 @@ new narwal.Transaction(function (done) {
     
     .insert({ "color": "red" })       // Insert new team which color is red
     
-    .then(function (inserted) {       // Once new team created
+    .then(function (newTeam) {       // Once new team created
       
       narwal.models.Player            // Use Model "Player"
-      
-        .insert(                      // Insert new player which team is the newly created team
-          { "username": "dude", "team": inserted.id })
+        
+                                      // Insert new player which team is the newly created team
+        .insert({ "team": newTeam.id })
         
         .then(                        // Once new player created
           done);                      // Commit transaction
