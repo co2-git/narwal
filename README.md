@@ -166,8 +166,7 @@ new narwal.Transaction(function (done) {
       
       narwal.models.Player            // Use Model "Player"
         
-                                      // Insert new player which team is the newly created team
-        .insert({ "team": newTeam.id })
+        .insert({ "team": newTeam })  // Insert new player which team is the newly created team
         
         .then(                        // Once new player created
           done);                      // Commit transaction
