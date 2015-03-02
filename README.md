@@ -153,7 +153,7 @@ You can keep track of your revisions such as:
 
 ```js
 // v0
-new narwal.Model('Player', { name: String }, { version: 0 });
+new narwal.Model('Player', { name: String }, { version: 0, revision: true });
 
 // v1
 // ALTER TABLE players ADD FIELD score INT
