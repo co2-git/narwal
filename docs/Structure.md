@@ -1,7 +1,7 @@
 Structure
 =========
 
-This holds the structure (fields) representation of a table. **Note that the tables must exists and their structure must match**.
+This holds the structure (fields) representation of a table. **Note that the tables must exists and their structure must match**. See the [Migration Section](docs/Migration.md) for creating and altering structure.
 
 # Fields
 
@@ -15,7 +15,17 @@ Structure is a list of fields which syntax is:
 }
 ```
 
-# Types
+# Field
+
+`Field` is an object that has the following properties:
+
+| Property | Type | Description | Example | Default |
+|----------|------|-------------|---------|---------|
+| `type` | `Mixed` | The field's data type | `{ type: String }` | `String` |
+| `required` | `Boolean` | Whether or not this field is required on `insert` queries | `{ required: true }` | `false` |
+| `validate` | `Mixed` | A validator that must be complied with on `insert` and `update` queries | `{ validate: "10..15" }` |
+
+# Type
 
 ## Native type
 
