@@ -158,27 +158,14 @@ new narwal.Transaction(function () {
 
 # Migration
 
-You can create or alter tables using models:
+You can create MySQL tables from models:
 
 ```js
-narwal.models.Player.create({ alter: true });
+narwal.models.Player.create();
 ```
 
-You can keep track of your revisions such as:
+Specify `{ "alter": true }` to alter the table in case it already exists but has a different structure. If the table does not exists, it will be created.
 
 ```js
-// v0
-new narwal.Model('Player', { name: String }, { version: 0, revision: true });
-
-// v1
-// ALTER TABLE players ADD FIELD score INT
-narwal.models.Player.structure.score = { type: Number };
-narwal.models.Player.version = 1;
-
-// v2
-// ALTER TABLE players ADD FIELD email VARCHAR(255)
-narwal.models.Player.structure.email = { type: String, validate: /^.+@.+$/ };
-narwal.models.Player.version = 2;
-
-// ...
+narwal.models.Player.create({ "alter": true });
 ```
