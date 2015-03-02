@@ -8,11 +8,9 @@ This holds the structure (fields) representation of a table. **Note that the tab
 Structure is a list of fields which syntax is:
 
 ```js
-{
-  "field_1": Field,
-  "field_2": Field,
-  ...
-}
+var structure = { "field 1": Field, "field 2": Field };
+
+new narwal.Model('My Model', structure);
 ```
 
 # Field
