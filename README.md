@@ -114,6 +114,35 @@ narwal.models.Employee
   .remove({ "first_name": 'John', "last_name": 'Doe' });
 ```
 
+# Filters
+
+Filters can handle complex `WHERE` statements
+
+```sql
+SELECT * FROM players 
+  WHERE 
+    first_name != 'John' 
+  AND
+    (last_name = 'Jackson' OR last_name REGEXP '^Smith')
+  AND
+    score > 100
+  AND
+    trial_expiration_date > NOW()
+```
+
+```js
+var is = narwal.is;
+
+narwal.models.Player
+  
+  .filter({
+    "first_name":     is.not("John"),
+    "last_name":      [ "Jackson", /^Smith/ ],
+    "score":          is.above(100),
+    "dob":            is.after(is.sql('NOW()'))
+  });
+```
+
 # Relations
 
 It is easy to link different models together:
