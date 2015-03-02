@@ -47,6 +47,8 @@ new narwal.Model('Employee', {
 });
 ```
 
+Find out more about [structuring your data models](docs/Structure.md)
+
 # CRUD Queries
 
 `narwal` models can easily be queried for `SELECT`, `INSERT`, `UPDATE` and `DELETE` queries.
