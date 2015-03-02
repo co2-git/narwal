@@ -130,10 +130,40 @@ narwal.models.Player.after('remove', function (row, done) {
 
 # Transactions
 
+```js
+new narwal.Transaction(function () {
+  
+  // Queries run here will force a rollback on error
+  
+  narwal.models.Player.insert() ...
+});
+```
+
 # Stream support
 
-# Pipe
+# Migration
+
+You can create or alter tables using models:
 
 ```js
-Player1.find().stream().pipe(Player2);
+narwal.models.Player.create({ alter: true });
+```
+
+You can keep track of your revisions such as:
+
+```js
+// v0
+new narwal.Model('Player', { name: String }, { version: 0 });
+
+// v1
+// ALTER TABLE players ADD FIELD score INT
+narwal.models.Player.structure.score = { type: Number };
+narwal.models.Player.version = 1;
+
+// v2
+// ALTER TABLE players ADD FIELD email VARCHAR(255)
+narwal.models.Player.structure.email = { type: String, validate: /^.+@.+$/ };
+narwal.models.Player.version = 2;
+
+// ...
 ```
