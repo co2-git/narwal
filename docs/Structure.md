@@ -17,12 +17,12 @@ new narwal.Model('My Model', structure);
 
 `Field` is an object that has the following properties:
 
-| Property | Type | Description | Example | Default |
-|----------|------|-------------|---------|---------|
+| Property | Type | Description | Default |
+|----------|------|-------------|---------|
 | [`type`](#type) | `Mixed` | The field's data type | { "type": `String` } | `String` |
-| [`required`](#required) | `Boolean` | Whether or not this field is required on `insert` queries | `{ required: true }` | `false` |
-| `validate` | `Mixed` | A validator that must be complied with on `insert` and `update` queries | `{ validate: "10..15" }` | `undefined` |
-|
+| [`required`](#required) | `Boolean` | Whether or not this field is required on `insert` queries | `false` |
+| [`validate`](#validate) | `Mixed` | A validator that must be complied with on `insert` and `update` queries | `undefined` |
+| `default` | `Mixed` | A default value to be applied on `insert` and `update` queries | `undefined` |
 
 # <a name="type"></a>Type
 
@@ -33,10 +33,10 @@ We match some JavaScript native types with some MySQL types:
 | JavaScript types | MySQL types |
 |------------------|-------------|
 | `String` | VARCHAR(255) |
-| `Number` } | INT(11) |
-| `Date` } | TIMESTAMP |
-| `Boolean` } | TINYINT(1) |
-| `Buffer` } | BINARY |
+| `Number` | INT(11) |
+| `Date` | TIMESTAMP |
+| `Boolean` | TINYINT(1) |
+| `Buffer` | BINARY |
 
 ```js
 new narwal.Model('Player', {
@@ -91,4 +91,49 @@ new narwal.Model('Player', {
 narwal.models.Player.insert({});
 
 // [ NarwalError: Player::insert => Missing required field 'name' ]
+```
+
+# <a name="valdiate"></a>Validate
+
+You can define a validator for a field. The validator is called during `insert` and `update` queries. The validator must return `true`. Invalid data (`false`) will interrupt the query pipeline.
+
+## Regular expression
+
+You can validate a regular expression. For example, make sure that all urls begin by `https://`:
+
+```js
+new narwal.Model('Player', {
+  "url": {
+    "type": String,
+    "validate": /^https:\/\//,
+  });
+  
+// Invalid data will throw an error
+
+narwal.models.Player.insert({ url: 'http://example.com' });
+
+// [ NarwalError: Player::insert => Validation failed for field 'url' (regex failed) ]
+```
+
+## Function
+
+Validators can be passed as a function.
+
+Note that validators are **synchronous**. If you want to do **asynchronous** validation, use the [Hooks](docs/Hooks.md).
+
+```js
+new narwal.Model('Player', {
+  "number": {
+    "type": Number,
+    "validate": function (data) {
+      // Numbers must be between 5 and 15
+      return (data >= 5) && (data <= 15);
+    },
+  });
+  
+// Invalid data will throw an error
+
+narwal.models.Player.insert({ "number": 100 });
+
+// [ NarwalError: Player::insert => Validation failed for field 'number' ]
 ```
