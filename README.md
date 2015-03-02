@@ -3,7 +3,7 @@ n    a    r    w    a    l
 
 ## alpha - do not use (yet)
 
-`narwal` (NodeJS) is a loosely coupled structure-data architecture for modeling and moving around your MySQL data.
+`narwal` is a **loosely coupled structure-data architecture** for modeling and moving around MySQL data.
 
 # Install
 
@@ -15,34 +15,47 @@ npm install narwal
 var narwal = require('narwal');
 ```
 
-# Structure abstraction
+# Model
 
-With `narwal` it's easy to modelize your data structure:
+With `narwal` it's easy to modelize your tables structure:
 
 ```js
-new narwal.Model('Employee', {
+// Model for `employees` table
+
+new narwal.Model("Employee", {
+
+  // FIELD first_name VARCHAR(255)
+  
   "first_name": {
-    type: String,
-    required: true
+    type:       String,
+    required:   true
   },
+  
+  // FIELD last_name VARCHAR(255)
   
   "last_name": {
-    type: String,
-    required: true
+    type:       String,
+    required:   true
   },
+  
+  // FIELD email VARCHAR(255)
   
   "email": {
-    type: String
-    validate: /^.+@.+$/
+    type:       String
+    validate:   /^.+@.+$/
   },
+  
+  // FIELD dob TIMESTAMP
   
   "dob": {
-    type: Date
+    type:       Date
   },
   
+  // FIELD active TINYINT(1) DEFAULT 0
+  
   "active": {
-    type: Boolean,
-    default: false
+    type:       Boolean,
+    default:    false
   }
 });
 ```
