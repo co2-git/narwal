@@ -20,7 +20,7 @@ new narwal.Model('My Model', structure);
 | Property | Type | Description | Example | Default |
 |----------|------|-------------|---------|---------|
 | [`type`](#type) | `Mixed` | The field's data type | { "type": `String` } | `String` |
-| `required` | `Boolean` | Whether or not this field is required on `insert` queries | `{ required: true }` | `false` |
+| [`required`](#required) | `Boolean` | Whether or not this field is required on `insert` queries | `{ required: true }` | `false` |
 | `validate` | `Mixed` | A validator that must be complied with on `insert` and `update` queries | `{ validate: "10..15" }` | `undefined` |
 |
 
@@ -60,4 +60,35 @@ We will soon incorporate an API that covers all MySQL data types and that will h
 
 ```js
 new narwal.Model('Player', { lat: narwal.Types.Decimal(6, 9) }
+```
+
+## Alternative type declaration syntaxes
+
+## Single text field
+
+A structure that only has one field which data type is `String` can be declared such as:
+
+```js
+new narwal.Model('Player', 'name');
+
+// which is sugar for
+new narwal.Model('Player', { 'name': { 'type': String } });
+```
+
+# <a name="required"></a>Required
+
+You can require fields. These fields will be required to have for data waiting to be inserted.
+
+```js
+new narwal.Model('Player', {
+  'name': {
+    'required': true
+  }
+});
+
+// Inserting a player without the 'name' field will throw an error
+
+narwal.models.Player.insert({});
+
+// [ NarwalError: Missing required field 'name' ]
 ```
