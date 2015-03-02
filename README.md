@@ -149,13 +149,35 @@ narwal.models.Player.after('remove', function (row, done) {
 # Transactions
 
 ```js
-new narwal.Transaction(function () {
+new narwal.Transaction(function (done) {
   
   // Queries run here will force a rollback on error
   
-  narwal.models.Player.insert() ...
+  // Call done() when done to commit the transaction
+  
+  
+  // Example of a transaction:
+  
+  narwal.models.Team                  // Use Model "Team"
+    
+    .insert({ "color": "red" })       // Insert new team which color is red
+    
+    .then(function (inserted) {       // Once new team created
+      
+      narwal.models.Player            // Use Model "Player"
+      
+        .insert(                      // Insert new player which team is the newly created team
+          { "username": "dude", "team": inserted.id })
+        
+        .then(                        // Once new player created
+          done);                      // Commit transaction
+      }
+    );
+  
 });
 ```
+
+Learn more about transactions [here](docs/Transactions.md)
 
 # Stream support
 
