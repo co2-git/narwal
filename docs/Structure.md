@@ -40,10 +40,10 @@ We match some JavaScript native types with some MySQL types:
 
 ```js
 new narwal.Model('Player', {
-  "name":   String,       // FIELD name VARCHAR(255)
-  "score":  Number,       // FIELD score INT(11)
-  "dob":    Date,         // FIELD dob TIMESTAMP
-  "active": Boolean       // FIELD active TINYINT(1)
+  "name":   { "type": String },       // FIELD name VARCHAR(255)
+  "score":  { "type": Number },       // FIELD score INT(11)
+  "dob":    { "type": Date },         // FIELD dob TIMESTAMP
+  "active": { "type": Boolean }       // FIELD active TINYINT(1)
 });
 ```
 
@@ -52,8 +52,11 @@ new narwal.Model('Player', {
 Any other MySQL types can be typed:
 
 ```js
-                            // FIELD lat DECIMAL(6,9)
-new narwal.Model('Player',  { lat: 'DECIMAL(6,9)' });
+new narwal.Model("Player", {
+  "lat": {            
+    "type": "DECIMAL(6,9)"          // FIELD lat DECIMAL(6,9)
+  }
+});
 ```
 
 We will soon incorporate an API that covers all MySQL data types and that will have the following syntax:
