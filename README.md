@@ -60,7 +60,7 @@ new narwal.Model("Employee", {
 });
 ```
 
-Find out more about [structuring your data models](docs/Structure.md)
+Find out more about [structuring your data models](docs/Structure.md).
 
 # CRUD Queries
 
@@ -77,6 +77,8 @@ narwal.models.Employee
   .insert({ "first_name": 'John', "last_name": 'Doe' });
 ```
 
+Find out more about [inserting data](docs/Insert.md).
+
 ## SELECT
 
 ```sql
@@ -90,6 +92,8 @@ narwal.models.Employee
   .limit(10)
   .sort("email");
 ```
+
+Find out more about [retrieving data](docs/Retrieve.md).
 
 ## UPDATE
 
