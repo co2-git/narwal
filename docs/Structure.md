@@ -22,7 +22,9 @@ new narwal.Model('My Model', structure);
 | [type](#type) | `Mixed` | The field's data type | `String` |
 | [required](#required) | `Boolean` | Whether or not this field is required on `insert` queries | `false` |
 | [validate](#validate) | `Mixed` | A validator that must be complied with on `insert` and `update` queries | `undefined` |
-| `default` | `Mixed` | A default value to be applied on `insert` and `update` queries | `undefined` |
+| [default](#default) | `Mixed` | A default value to be applied on `insert` and `update` queries | `undefined` |
+| [comment](#comment) | `String` | A comment explaining the field's role | `undefined` |
+| [null](#null) | `Boolean` | Whether or not field accepts null values | `false` |
 
 # <a name="type"></a>Type
 
