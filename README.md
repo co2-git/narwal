@@ -3,7 +3,7 @@ n    a    r    w    a    l
 
 ## alpha - do not use (yet)
 
-`narwal` (NodeJS) is a loosely coupled structure-data architecture for modeling and moving around your MySQL data.
+`narwal` is a **loosely coupled structure-data architecture** for modeling and moving around MySQL data.
 
 # Install
 
@@ -11,329 +11,221 @@ n    a    r    w    a    l
 npm install narwal
 ```
 
-# Use
-
 ```js
 var narwal = require('narwal');
 ```
 
-# Overview
-
-`narwal` gives you model abstraction so you manipulate your MySQL data and structure easier.
-
-```js
-// Create a model representation of a table called players
-// This table must exists with a matching structure as the one modelized
-
-var Player = new narwal.Model('Player', { name: String, score: Number, joined: Date });
-```
-
-```sql
-SELECT name FROM players WHERE score > 100 LIMIT 10 ORDER BY joined DESC
-```
-
-```js
-Player // SELECT
-
-  // column selection
-  
-  .select('name')
-  
-  // WHERE score > 100
-  
-  .above({ 'score': 100 })
-  
-  // LIMIT 10
-  
-  .filter(10)
-  
-  // ORDER BY joined DESC
-  
-  .sort({ 'joined': false })
-  
-  // Do something with the results
-  
-  .forEach(function (player) {
-    console.log(player);
-  });
-```
-
-```sql
-INSERT INTO players (name) VALUES('Lara')
-```
-
-```js
-Player
-
-  // INSERT INTO players (name) VALUES('Lara')
-  .push({ name: 'Lara' })
-  
-  // Do something with results
-  .pushed(function (player) {
-    console.log('New player created', player);
-  });
-```
-
-```sql
-UPDATE players SET score=100 WHERE name='Lara'
-```
-
-```js
-Player
-  
-  .update({ name: 'Lara' }, { score: 100 })
-  
-  .updated(function (players) {
-    console.log
-```
-
-```sql
-DELETE FROM players WHERE score > 100
-```
-
-```js
-Player
-  // DELETE FROM players WHERE score = 100
-  .remove({ score: 100 })
-  
-  .removed(function () {});
-```
-
 # Model
 
-## Model `constructor`
-
-Creates a new Narwal Model.
-
-    {Model} new narwal.Model(String name, Object? structure, Object? options);
-
-| Argument | Type | Required | Default | Description |
-|----------|------|----------|---------|-------------|
-| name | String | ✔ | | The name of the model |
-| structure | Object | ✖ | `{}` | The structure |
-| options | Object | ✖ | `{}` | Model options |
+With `narwal` it's easy to modelize your tables structure:
 
 ```js
-new narwal.Model('Player', { name: String }, { prefix: 'test_' });
-```
+// Model for `employees` table
 
-## Model `connect()`
+new narwal.Model("Employee", {
 
-MySQL thread setter. Narwal models are connexion-agnostic. We use [node-mysql](https://github.com/felixge/node-mysql/) default connection method for the moment. Future implementations to come.
-
-    {Model} Model.connect(String | Object);
-
-```js
-
-var Player = require('./models/Player');
-
-Player.forEach(fn);
-
-Player.connect('mysql://user@localost/db');
+  // FIELD first_name VARCHAR(255)
   
-// You can also a Narwal client
-
-var Client = require('narwal').Client;
-
-var client = new Client('mysql://user@localost/db');
-
-Player.connect(client).stream().limit(100000).rows(1000);
+  "first_name": {
+    type:       String,
+    required:   true
+  },
+  
+  // FIELD last_name VARCHAR(255)
+  
+  "last_name": {
+    type:       String,
+    required:   true
+  },
+  
+  // FIELD email VARCHAR(255)
+  
+  "email": {
+    type:       String
+    validate:   /^.+@.+$/
+  },
+  
+  // FIELD dob TIMESTAMP
+  
+  "dob": {
+    type:       Date
+  },
+  
+  // FIELD active TINYINT(1) DEFAULT 0
+  
+  "active": {
+    type:       Boolean,
+    default:    false
+  }
+});
 ```
 
-Events:
+Find out more about [structuring your data models](docs/Structure.md).
 
-- **error** `Error`
-- **connected**
-- **disconnected**
+# CRUD Queries
 
-Helpers:
+`narwal` models can easily be queried for `SELECT`, `INSERT`, `UPDATE` and `DELETE` queries.
 
-| Name | Example | Description |
-|------|---------|-------------|
-| connected | `client().connected(Function connected)` |  Listens on "connected" | 
-| disconnected | `client().disconnected(Function disconnected)` |  Listens on "disconnected" | 
-
-## Model `create()`
-
-Create a table stucture from Model. Returns `Query`.
-
-    {Query} Model.create(Object? options, Function? callback)
+## INSERT INTO
 
 ```sql
-CREATE TABLE players (
-  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR NOT NULL,
-  score INT NOT NULL DEFAULT 500)
-  ENGINE=INNODB DEFAULT CHARSET utf-8
+INSERT INTO employees (first_name, last_name) VALUES ('John', 'Doe')
 ```
 
 ```js
-new narwal
-
-  .Model('Player', {
-    'name': String,
-    'score': {
-      'type': Number,
-      'default': 500
-    }
-  })
-  
-  .create();
+narwal.models.Employee
+  .insert({ "first_name": 'John', "last_name": 'Doe' });
 ```
 
-Events:
+Find out more about [inserting data](docs/Insert.md).
 
-- **error** `Error`
-- **success**
+## SELECT
 
-Helpers:
-
-| Name | Example | Description |
-|------|---------|-------------|
-| created | `create().created(Function success)` |  Listens on "success" |
-
-## Model `filter()`
-
-Performs a filter query. Returns [`Query`](#Query).
-
-    {Query} Model.filter(Object filter)
-    
 ```sql
-SELECT FROM models WHERE field='value'
+SELECT email FROM employees WHERE first_name='John' AND last_name='Doe' LIMIT 10 ORDER BY email ASC
 ```
 
 ```js
-Model.filter({ field: 'value' });
+narwal.models.Employee
+  .find({ "first_name": 'John', "last_name": 'Doe' })
+  .select("email")
+  .limit(10)
+  .sort("email");
 ```
 
-Events:
+Find out more about [retrieving data](docs/Retrieve.md).
 
-- **error** `Error`
-- **success** `[Row]`
+## UPDATE
 
-Helpers:
+```sql
+UPDATE employees SET first_name='John' WHERE last_name='Doe'
+```
 
-| Name | Example | Description |
-|------|---------|-------------|
-| found | `find().found(Function success)` |  Listens on "success" and [Row].length | 
-| notFound | `find().notFound(Function success)` |  Listens on "success" and ! [Row].length | 
-| forEach | `find().forEach(function (model) { //... }})` | Listens on "success" and for each [Row] |
+```js
+narwal.models.Employee
+  .update({ "first_name": 'John' })
+  .where({ "last_name": 'Doe' });
+```
+
+## DELETE
+
+```sql
+DELETE FROM employees WHERE first_name='John' AND last_name='Doe'
+```
+
+```js
+narwal.models.Employee
+  .remove({ "first_name": 'John', "last_name": 'Doe' });
+```
+
+# Filters
+
+Filters can handle complex `WHERE` statements
+
+```sql
+SELECT * FROM players 
+  WHERE 
+    first_name != 'John' 
+  AND
+    (last_name = 'Jackson' OR last_name REGEXP '^Smith')
+  AND
+    score > 100
+  AND
+    trial_expiration_date > NOW()
+```
+
+```js
+var is = narwal.is;
+var sql = narwal.sql;
+
+narwal.models.Player
+  
+  .filter({
+  
+    "first_name":               is.not("John"),
+    "last_name":                [ "Jackson", /^Smith/ ],
+    "score":                    is.above(100),
+    "trial_expiration_date":    is.after(sql('NOW()'))
+  
+  });
+```
+
+# Relations
+
+It is easy to link different models together:
+
+```js
+// Join model Player with model Team
+
+new narwal.Model("Team", { "color": String });
+
+new narwal.Model("Player", { "username": String, "team": narwal.models.Team });
+
+// Note that you can do deep-linking search:
+
+narwal.models.Player
+  // Find players which team's color is red
+  .find({ "team": { "color": "red" } });
+```
+
+# Hooks
+
+You can also `before` and `after` hooks on any operations:
+
+```js
+narwal.models.Player.before('insert', function (row, done) {
+  fs.mkdir('users/' + row.id, done);
+});
+
+narwal.models.Player.after('remove', function (row, done) {
+  fs.rmdir('users/' + row.id, done);
+}
+```
+
+# Transactions
+
+```js
+new narwal.Transaction(function (done) {
+  
+  // Queries run here will force a rollback on error
+  
+  // Call done() when done to commit the transaction
+  
+  
+  // Example of a transaction:
+  
+  narwal.models.Team                  // Use Model "Team"
     
-## Model `find()`
-
-Performs a find query. Returns [`Find`](#Find).
-
-    {Query} Model.find(Mixed? filter)
-
-```js
-
-// Find all
-
-Model.find();
-
-// Sugar for Model.find().filter(Object);
-
-Model.find({ field: 'value' });
-
-// Sugar for Model.find().limit(Number);
-
-Model.find(10);
+    .insert({ "color": "red" })       // Insert new team which color is red
+    
+    .then(function (newTeam) {       // Once new team created
+      
+      narwal.models.Player            // Use Model "Player"
+        
+        .insert({ "team": newTeam })  // Insert new player which team is the newly created team
+        
+        .then(                        // Once new player created
+          done);                      // Commit transaction
+      }
+    );
+  
+});
 ```
 
-Events:
+Learn more about transactions [here](docs/Transactions.md)
 
-- **error** `Error`
-- **success** `[Row]`
+# Stream support
 
-Helpers:
+# Migration
 
-| Name | Example | Description |
-|------|---------|-------------|
-| found | `find().found(Function success)` |  Listens on "success" and [Row].length | 
-| notFound | `find().notFound(Function success)` |  Listens on "success" and ! [Row].length | 
-| forEach | `find().forEach(function (model) { //... }})` | Listens on "success" and for each [Row] |
-
-## Model `findById()`
-
-Performs a find query with a filter by id. Returns `Query`.
-
-    Model.findById(Number)
+You can create MySQL tables from models:
 
 ```js
-
-// Find by id
-
-Model.findById(3837283);
+narwal.models.Player.create();
 ```
 
-Events:
-
-- **error** `Error`
-- **success** `[Row]`
-
-Helpers:
-
-| Name | Example | Description |
-|------|---------|-------------|
-| found | `findById().found(Function success)` |  Listens on "success" and [Row].length | 
-| notFound | `findById().notFound(Function success)` |  Listens on "success" and ! [Row].length |
-
-## Model `findOne()`
-
-Performs a find query and returns first found. Returns Query. Success emits a Row object.
-
-    Model.findOne(Mixed? filter)
+Specify `{ "alter": true }` to alter the table in case it already exists but has a different structure. If the table does not exists, it will be created.
 
 ```js
-
-// Find one with no filter
-
-Model.findOne();
-
-// Sugar for Model.findOne().filter(Object);
-
-Model.findOne({ field: 'value' });
+narwal.models.Player.create({ "alter": true });
 ```
-
-Events:
-
-- **error** `Error`
-- **success** `Row`
-
-Helpers:
-
-| Name | Example | Description |
-|------|---------|-------------|
-| found | `findOne().found(Function success)` |  Listens on "success" and Row | 
-| notFound | `findOne().notFound(Function success)` |  Listens on "success" and ! Row |
-
-## Model `limit()`
-
-Apply a limit filter. Returns Query. Success emits `[Row]`.
-
-    {Query} Model.limit(Number limit).success([Row])
-
-```js
-
-// Find 10
-
-Model.limit(10);
-
-// Find one (will return an array, even if it has only one row in it)
-
-Model.limit(1);
-```
-
-Events:
-
-- **error** `Error`
-- **success** `[Row]`
-
-Helpers:
-
-| Name | Example | Description |
-|------|---------|-------------|
-| found | `limit().found(Function success)` |  Listens on "success" and `[Row].length` | 
-| notFound | `limit().notFound(Function success)` |  Listens on "success" and `! [Row].length` |
-| forEach | `find().forEach(function (model) { //... }})` | Listens on "success" and for each [Row] |
-
