@@ -179,7 +179,7 @@ narwal.models.Player.before('insert', function (row, done) {
 
 narwal.models.Player.after('remove', function (row, done) {
   fs.rmdir('users/' + row.id, done);
-}
+});
 ```
 
 # Transactions
@@ -228,4 +228,10 @@ Specify `{ "alter": true }` to alter the table in case it already exists but has
 
 ```js
 narwal.models.Player.create({ "alter": true });
+```
+
+# Connect
+
+```js
+narwal.
 ```
